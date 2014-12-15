@@ -1,0 +1,1183 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Inversion</name>
+    </assembly>
+    <members>
+        <member name="T:Inversion.Collections.ConcurrentDataCollection`1">
+            <summary>
+            An implementation of <see cref="T:Inversion.Collections.IDataCollection`1"/> that
+            is safe for concurrent use.
+            </summary>
+            <typeparam name="T">The type of the elements in the collection.</typeparam>
+        </member>
+        <member name="T:Inversion.Collections.IDataCollection`1">
+             <summary>
+             Represents a collection of <see cref="T:Inversion.IData"/>  objects,
+             that can be accessed by index.
+             </summary>
+            <typeparam name="T">The type of elements in the list.</typeparam>
+        </member>
+        <member name="T:Inversion.IData">
+            <summary>
+            Base interface for data models in Inversion.
+            </summary>
+            <remarks>
+            <para>
+            While this represents a point of extensibility for data models in Inversion this is pretty
+            much limited to simple serialisation. `IData` had more relevance in Acumen
+            pre-extension methods, now it's primary untility is simply to flag what is data-model
+            and to be able to contrain based upon that.
+            </para>
+            <para>
+            This approach to model serialisation is simple, but also fast, uncluttered, and explicit.
+            The writers used obviously are  often used by a whole object graph being
+            written out, and is part of a broader application concern. The writer
+            should not be used in any way that yields side-effects beyond the
+            serialisation at hand. <see cref="M:Inversion.IData.ToXml(System.Xml.XmlWriter)"/> and <see cref="M:Inversion.IData.ToJson(Newtonsoft.Json.JsonWriter)"/>
+            need to be fast and reliable. 
+            </para>
+            <para>
+            Inversion favours an application where XML (or JSON for apps with data clients) is its primary external
+            interface, which is transformed (normally with XSL) into a view stuitable for a particular
+            class of user-agent. Other approaches may have a different regard for a data-model
+            and `IData` serves as a point of extension in those cases perhaps.
+            </para>
+            <para>
+            Extension methods are provided in <see cref="T:Inversion.DataEx"/> to provide `IData.ToXml()` and `IData.ToJson()`.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Inversion.IData.ToXml(System.Xml.XmlWriter)">
+            <summary>
+            Produces an xml representation of the model.
+            </summary>
+            <param name="writer">The writer to used to write the xml to. </param>
+        </member>
+        <member name="M:Inversion.IData.ToJson(Newtonsoft.Json.JsonWriter)">
+            <summary>
+            Produces a json respresentation of the model.
+            </summary>
+            <param name="writer">The writer to use for producing json.</param>
+        </member>
+        <member name="P:Inversion.IData.Data">
+            <summary>
+            Provides an abstract representation
+            of the objects data expressed as a JSON object.
+            </summary>
+        </member>
+        <member name="P:Inversion.Collections.IDataCollection`1.Label">
+            <summary>
+            The label that should be used for the collection in
+            any notation presenting the collection. 
+            </summary>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataCollection`1.#ctor(System.String)">
+            <summary>
+            Instantiates a new empty collection with the lable provided.
+            </summary>
+            <param name="label">The label of the collection.</param>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataCollection`1.#ctor">
+            <summary>
+            Instantiates an empty collection.
+            </summary>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataCollection`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Instanciates a new data collection with elements
+            copied from the provided collection.
+            </summary>
+            <param name="collection">
+            The collection whose elements are copied into the
+            new data collection.
+            </param>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataCollection`1.#ctor(Inversion.Collections.IDataCollection{`0})">
+            <summary>
+            Instantiates a collection populating it with the elements
+            of the provided collection.
+            </summary>
+            <param name="other">The other collection to populate the new collection with.</param>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataCollection`1.ContentToXml(System.Xml.XmlWriter)">
+            <summary>
+            Produces an XML representation of the collections elements  to a provided writer.
+            </summary>
+            <param name="writer">
+            The <see cref="T:System.Xml.XmlWriter"/> the representation is written to.
+            </param>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataCollection`1.ContextToJson(Newtonsoft.Json.JsonWriter)">
+            <summary>
+            Produces an JSON representation of the collection to a provided writer.
+            </summary>
+            <param name="writer">
+            The <see cref="T:Newtonsoft.Json.JsonWriter"/> the representation is written to.
+            </param>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataCollection`1.ToXml(System.Xml.XmlWriter)">
+            <summary>
+            Produces an XML representation of the collection  to a provided writer.
+            </summary>
+            <param name="writer">
+            The <see cref="T:System.Xml.XmlWriter"/> the representation is written to.
+            </param>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataCollection`1.ToJson(Newtonsoft.Json.JsonWriter)">
+            <summary>
+            Produces an JSON representation of the collection  to a provided writer.
+            </summary>
+            <param name="writer">
+            The <see cref="T:Newtonsoft.Json.JsonWriter"/> the representation is written to.
+            </param>
+        </member>
+        <member name="P:Inversion.Collections.ConcurrentDataCollection`1.Label">
+            <summary>
+            The label that should be used for the collection in
+            any notation presenting the collection. 
+            </summary>
+            <remarks>This will default to "list".</remarks>
+        </member>
+        <member name="P:Inversion.Collections.ConcurrentDataCollection`1.Data">
+            <summary>
+            Provides an abstract representation
+            of the objects data expressed as a JSON object.
+            </summary>
+            <remarks>
+            For this type the json object is created each time
+            it is accessed.
+            </remarks>
+        </member>
+        <member name="T:Inversion.Collections.ConcurrentDataDictionary`1">
+            <summary>
+            A thread-safe dictionary of key-value pairs where the key is a string and the dictionary itself implements
+            `IData`
+            </summary>
+            <typeparam name="TValue">The type of the element values.</typeparam>
+        </member>
+        <member name="T:Inversion.Collections.IDataDictionary`1">
+            <summary>
+            Represents a generic dictionary that
+            implements <see cref="T:Inversion.IData"/>, where the keys are strings.
+            </summary>
+            <typeparam name="T">The type of the element values.</typeparam>
+        </member>
+        <member name="M:Inversion.Collections.IDataDictionary`1.Import(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,`0}})">
+            <summary>
+            Import the provided key/value pairs into the dictionary.
+            </summary>
+            <param name="other">The key/value pairs to copy.</param>
+            <returns>
+            This dictionary.
+            </returns>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataDictionary`1.#ctor">
+            <summary>
+            Instantiates a new empty dictionary.
+            </summary>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataDictionary`1.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,`0}})">
+            <summary>
+            Instantiates a new dictionary populated with the enumerable of key-value pairs provided.
+            </summary>
+            <param name="other">The key-value pairs to populate the dictionary with.</param>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataDictionary`1.#ctor(Inversion.Collections.DataDictionary{`0})">
+            <summary>
+            Instantiates a new dictionary populated from the dictionary provided.
+            </summary>
+            <param name="other">The other dictionary to populate this dictionary from.</param>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataDictionary`1.Clone">
+            <summary>
+            Clones the dictionary.
+            </summary>
+            <returns>Returnes a new dictionary instance populated by this one.</returns>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataDictionary`1.Import(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,`0}})">
+            <summary>
+            Imports the key-value pairs from a provided dictionary into this one.
+            </summary>
+            <param name="other">The other dictionary to import into this one.</param>
+            <returns>Returns the current instance of this dictionary.</returns>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataDictionary`1.ContentToXml(System.Xml.XmlWriter)">
+            <summary>
+            Produces an XML representation of the dictionary elements.
+            </summary>
+            <param name="writer">The xml writer the xml should be written to.</param>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataDictionary`1.ToXml(System.Xml.XmlWriter)">
+            <summary>
+            Produces and xml representation of the dictionary.
+            </summary>
+            <param name="writer">The xml writer the xml should be written to.</param>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataDictionary`1.ContentToJson(Newtonsoft.Json.JsonWriter)">
+            <summary>
+            Produces a json representation of the dictionary elements.
+            </summary>
+            <param name="writer">The json writer the json should be written to.</param>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataDictionary`1.ToJson(Newtonsoft.Json.JsonWriter)">
+            <summary>
+            Produces a json representation of the dictionary.
+            </summary>
+            <param name="writer">The json writer the json should be written to.</param>
+        </member>
+        <member name="P:Inversion.Collections.ConcurrentDataDictionary`1.Data">
+            <summary>
+            Provides an abstract representation
+            of the objects data expressed as a JSON object.
+            </summary>
+            <remarks>
+            For this type the json object is created each time
+            it is accessed.
+            </remarks>
+        </member>
+        <member name="T:Inversion.Collections.DataCollection`1">
+            <summary>
+            An implementation of <see cref="T:Inversion.Collections.IDataCollection`1"/> as a simple <see cref="T:System.Collections.Generic.List`1"/>. 
+            </summary>
+            <typeparam name="T">The type of elements in the list.</typeparam>
+        </member>
+        <member name="M:Inversion.Collections.DataCollection`1.#ctor(System.String)">
+            <summary>
+            Instantiates a new empty collection with the lable provided.
+            </summary>
+            <param name="label">The label of the collection.</param>
+        </member>
+        <member name="M:Inversion.Collections.DataCollection`1.#ctor">
+            <summary>
+            Instantiates a new, empty data collection.
+            </summary>
+        </member>
+        <member name="M:Inversion.Collections.DataCollection`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Instantiates a new data collection with elements
+            copied from the provided collection.
+            </summary>
+            <param name="collection">
+            The collection whose elements are copied into the
+            new data collection.
+            </param>
+        </member>
+        <member name="M:Inversion.Collections.DataCollection`1.#ctor(Inversion.Collections.IDataCollection{`0})">
+            <summary>
+            Instantiates a collection populating it with the elements
+            of the provided collection.
+            </summary>
+            <param name="other">The other collection to populate the new collection with.</param>
+        </member>
+        <member name="M:Inversion.Collections.DataCollection`1.Clone">
+            <summary>
+            Creates a clone of the collection by instantiating
+            a new collection populated with the elements of this one.
+            </summary>
+            <returns>Returns a new collection populated by this one.</returns>
+        </member>
+        <member name="M:Inversion.Collections.DataCollection`1.ContentToXml(System.Xml.XmlWriter)">
+            <summary>
+            Produces an XML representation of the dictionaries elements,
+            to a provided writer.
+            </summary>
+            <param name="writer">
+            The <see cref="T:System.Xml.XmlWriter"/> the representation is written to.
+            </param>
+        </member>
+        <member name="M:Inversion.Collections.DataCollection`1.ContextToJson(Newtonsoft.Json.JsonWriter)">
+            <summary>
+            Produces an JSON representation of the dictionaries elements,
+            to a provided writer.
+            </summary>
+            <param name="writer">
+            The <see cref="T:Newtonsoft.Json.JsonWriter"/> the representation is written to.
+            </param>
+        </member>
+        <member name="M:Inversion.Collections.DataCollection`1.ToXml(System.Xml.XmlWriter)">
+            <summary>
+            Produces an XML representation of the dictionaries  to a provided writer.
+            </summary>
+            <param name="writer">
+            The <see cref="T:System.Xml.XmlWriter"/> the representation is written to.
+            </param>
+        </member>
+        <member name="M:Inversion.Collections.DataCollection`1.ToJson(Newtonsoft.Json.JsonWriter)">
+            <summary>
+            Produces an JSON representation of the dictionaries  to a provided writer.
+            </summary>
+            <param name="writer">
+            The <see cref="T:Newtonsoft.Json.JsonWriter"/> the representation is written to.
+            </param>
+        </member>
+        <member name="P:Inversion.Collections.DataCollection`1.Label">
+            <summary>
+            The label that should be used for the collection in
+            any notation presenting the collection. 
+            </summary>
+            <remarks>This will default to "list".</remarks>
+        </member>
+        <member name="P:Inversion.Collections.DataCollection`1.Data">
+            <summary>
+            Provides an abstract representation
+            of the objects data expressed as a JSON object.
+            </summary>
+            <remarks>
+            For this type the json object is created each time
+            it is accessed.
+            </remarks>
+        </member>
+        <member name="T:Inversion.Collections.DataDictionary`1">
+            <summary>
+            A collection of key/value pairs, where the key is a string.
+            </summary>
+            <typeparam name="TValue">The type of the element values.</typeparam>
+        </member>
+        <member name="M:Inversion.Collections.DataDictionary`1.#ctor">
+            <summary>
+            Instantiates a new empty instance of the dictionary.
+            </summary>
+        </member>
+        <member name="M:Inversion.Collections.DataDictionary`1.#ctor(System.Collections.Generic.IDictionary{System.String,`0})">
+            <summary>
+            instantiates a new dictionary with the elements
+            copied over from the dictionary provided.
+            </summary>
+            <param name="other">
+            The dictionary to copy elements from.
+            </param>
+        </member>
+        <member name="M:Inversion.Collections.DataDictionary`1.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,`0}})">
+            <summary>
+            instantiates a new dictionary with the elements
+            copied from iterating over the key/value pairs provided.
+            </summary>
+            <param name="other">The key/value pairs to copy.</param>
+        </member>
+        <member name="M:Inversion.Collections.DataDictionary`1.Clone">
+            <summary>
+            Clones the data dictionary by instantiating a new one
+            populated by the elemens of this one.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Inversion.Collections.DataDictionary`1.Import(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,`0}})">
+            <summary>
+            Instantiates a dictionary populating it with the elements
+            of the provided dictionary.
+            </summary>
+            <param name="other">The other dictionary to populate the new collection with.</param>
+        </member>
+        <member name="M:Inversion.Collections.DataDictionary`1.ContentToXml(System.Xml.XmlWriter)">
+            <summary>
+            Produces an xml representation of the elements of the dictionary.
+            </summary>
+            <param name="writer">The xml writer the representation should be written to.</param>
+        </member>
+        <member name="M:Inversion.Collections.DataDictionary`1.ToXml(System.Xml.XmlWriter)">
+            <summary>
+            Produces and xml representation of the dictionary.
+            </summary>
+            <param name="writer">The xml writer the xml should be written to.</param>
+        </member>
+        <member name="M:Inversion.Collections.DataDictionary`1.ContentToJson(Newtonsoft.Json.JsonWriter)">
+            <summary>
+            Produces a json representation of the dictionaries elements.
+            </summary>
+            <param name="writer">The json writer the representation should be written to.</param>
+        </member>
+        <member name="M:Inversion.Collections.DataDictionary`1.ToJson(Newtonsoft.Json.JsonWriter)">
+            <summary>
+            Produces a json representation of the dictionary.
+            </summary>
+            <param name="writer">The json writer the representation should be written to.</param>
+        </member>
+        <member name="P:Inversion.Collections.DataDictionary`1.Data">
+            <summary>
+            Provides an abstract representation
+            of the objects data expressed as a JSON object.
+            </summary>
+            <remarks>
+            For this type the json object is created each time
+            it is accessed.
+            </remarks>
+        </member>
+        <member name="T:Inversion.Collections.DataModel">
+            <summary>
+            A <see cref="T:System.Dynamic.DynamicObject"/> implementing
+            an <see cref="T:Inversion.Collections.IDataDictionary`1"/> .
+            </summary>
+            <remarks>
+            <para>
+            This class is intended to help with exposing models to
+            Razor templates, as it allows ad hoc properties
+            to be used as dictionary keys, `model.UserDetails.Name` rather
+            than `model["UserDetails"].Name`
+            </para>
+            <para>
+            The initial idea was for  the `ControlState` to be
+            one of these. When I start playing about with Razor
+            a bit more I'll test it to see if there's any consequences.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.TrySetMember(System.Dynamic.SetMemberBinder,System.Object)">
+            <summary>
+            Implements trying to set a member of the data model ensuring that the value
+            being assigned is both of type `IData` and not null.
+            </summary>
+            <param name="binder">The binder provided by the call site.</param>
+            <param name="value">The value to set.</param>
+            <returns>true if the operation is complete, false if the call site should determine behavior.</returns>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.TryGetMember(System.Dynamic.GetMemberBinder,System.Object@)">
+            <summary>
+            Implements trying to get a member.
+            </summary>
+            <param name="binder">The binder provided by the call site.</param>
+            <param name="result">The result of the get operation.</param>
+            <returns>true if the operation is complete, false if the call site should determine behavior.</returns>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.Import(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,Inversion.IData}})">
+            <summary>
+            Imports the key-value pairs from a provided dictionary into this one.
+            </summary>
+            <param name="other">The other dictionary to import into this one.</param>
+            <returns>Returns the current instance of this dictionary.</returns>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.Add(System.String,Inversion.IData)">
+            <summary>
+            Adds the provided value to the model against the specified key.
+            </summary>
+            <param name="key">The key for the new element.</param>
+            <param name="value">The value to be added/</param>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.ContainsKey(System.String)">
+            <summary>
+            Determines whether or not the model contains anything stored against the provided key.
+            </summary>
+            <param name="key">The key to check.</param>
+            <returns>
+            Returns true if the model contains a key-value pair with a key corresponding to the
+            specified key; otherwise returns false.
+            </returns>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.Remove(System.String)">
+            <summary>
+            Removes the key-value pair of the specified key.
+            </summary>
+            <param name="key">The key to remove from the model.</param>
+            <returns>Rreturns true if the key was found and removed; otherwise returns false.</returns>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.TryGetValue(System.String,Inversion.IData@)">
+            <summary>
+            Tries to get the value of the key-value pair with the same
+            key as the one provided.
+            </summary>
+            <param name="key">The key to lookup.</param>
+            <param name="value">The value of the found key-value pair.</param>
+            <returns>Returns true if the operation was successful; otherwise returns false.</returns>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.Add(System.Collections.Generic.KeyValuePair{System.String,Inversion.IData})">
+            <summary>
+            Adds an element to the collection.
+            </summary>
+            <param name="item">The item to add to the collection.</param>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.Clear">
+            <summary>
+            Removes all elements from the collection.
+            </summary>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.Contains(System.Collections.Generic.KeyValuePair{System.String,Inversion.IData})">
+            <summary>
+            Checks to see if the collection contains a particular element.
+            </summary>
+            <param name="item">The item to check for in the collection.</param>
+            <returns>
+            Returns true if the item is contained in the collection;
+            otherwise returns false.
+            </returns>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.CopyTo(System.Collections.Generic.KeyValuePair{System.String,Inversion.IData}[],System.Int32)">
+            <summary>
+            Copies elements from the collection to and array,
+            starting at a specified index in the array.
+            </summary>
+            <param name="array">The array to copy elements to.</param>
+            <param name="arrayIndex">The index in the array to start copying to.</param>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.Remove(System.Collections.Generic.KeyValuePair{System.String,Inversion.IData})">
+            <summary>
+            Removes a specific item from the collection
+            if it is present.
+            </summary>
+            <param name="item">The item to remove from the collection.</param>
+            <returns>Returns true if the item was removed; otherwise returns false.</returns>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.GetEnumerator">
+            <summary>
+            Gets an enumerator that can be used to iterate over the collection.
+            </summary>
+            <returns>The enumerator for the collection.</returns>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets an enumerator that can be used to iterate over the collection.
+            </summary>
+            <returns>The enumerator for the collection.</returns>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.ToXml(System.Xml.XmlWriter)">
+            <summary>
+            Produces an xml representation of the collection.
+            </summary>
+            <param name="writer">The xml writer the xml should be written to.</param>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.ToJson(Newtonsoft.Json.JsonWriter)">
+            <summary>
+            Produces a json representation of the collection.
+            </summary>
+            <param name="writer">The writer the json should be written to.</param>
+        </member>
+        <member name="M:Inversion.Collections.DataModel.Clone">
+            <summary>
+            Clones this collection by creating a new one
+            populated by elements from this on.
+            </summary>
+            <returns>Returns the new collection as a copy of this one.</returns>
+        </member>
+        <member name="P:Inversion.Collections.DataModel.Data">
+            <summary>
+            Provides an abstract representation
+            of the objects data expressed as a JSON object.
+            </summary>
+            <remarks>
+            For this type the json object is created each time
+            it is accessed.
+            </remarks>
+        </member>
+        <member name="P:Inversion.Collections.DataModel.Keys">
+            <summary>
+            A collection of all the keys contained in the model.
+            </summary>
+        </member>
+        <member name="P:Inversion.Collections.DataModel.Values">
+            <summary>
+            A collection of all the values of the model.
+            </summary>
+        </member>
+        <member name="P:Inversion.Collections.DataModel.Item(System.String)">
+            <summary>
+            Obtains the value of the key-value pair with the same key as the one provided.
+            </summary>
+            <param name="key">The key to lookup.</param>
+            <returns>Returns the value of the key-value pair found, if any.</returns>
+        </member>
+        <member name="P:Inversion.Collections.DataModel.Count">
+            <summary>
+            Obtains the number of elements in the collection.
+            </summary>
+        </member>
+        <member name="P:Inversion.Collections.DataModel.IsReadOnly">
+            <summary>
+            Determines if the collection is read-only or not.
+            </summary>
+        </member>
+        <member name="T:Inversion.DataEx">
+            <summary>
+            Extension methods for <see cref="T:Inversion.IData"/>
+            largely concerned with supporting both
+            `.ToXml(...)` and `.ToJson(...)`
+            </summary>
+        </member>
+        <member name="M:Inversion.DataEx.ToXml(Inversion.IData)">
+            <summary>
+            Generates an XML representation of the specified <see cref="T:Inversion.IData"/> object.
+            </summary>
+            <param name="self">The data model to produce XML for.</param>
+            <returns>
+            Returns the XML representation as a `string`.
+            </returns>
+            <remarks>
+            This is implemented by creating a `StringWriter` and
+            calling `.ToXml(IData, StringWriter)`
+            </remarks>
+        </member>
+        <member name="M:Inversion.DataEx.ToXml(Inversion.IData,System.IO.TextWriter)">
+            <summary>
+            Produces an xml representation of the subject
+            `IData` object.
+            </summary>
+            <param name="self">The `IData` object to act upon.</param>
+            <param name="writer">The xml writer to write the representation to.</param>
+        </member>
+        <member name="M:Inversion.DataEx.ToJson(Inversion.IData)">
+            <summary>
+            Produces a json representation of the subject `IData` object.
+            </summary>
+            <param name="self">The `IData` object to act upon.</param>
+            <returns>Return the json representation of the `IData` object as a string.</returns>
+        </member>
+        <member name="M:Inversion.DataEx.ToJson(Inversion.IData,System.IO.TextWriter)">
+            <summary>
+            Produces a json representation of the subject `IData` object.
+            </summary>
+            <param name="self">The `IData` object to act upon.</param>
+            <param name="writer">The text writer the representation should be writtern to.</param>
+        </member>
+        <member name="M:Inversion.DataEx.ToJsonObject(Inversion.IData)">
+            <summary>
+            Provides a JSON Object view of the objects data.
+            </summary>
+            <param name="self">The `IData` object to act upon.</param>
+            <returns>
+            Returns a `JObject` representation of this objects data.
+            </returns>
+        </member>
+        <member name="T:Inversion.DataView">
+            <summary>
+            Represents a frozen view of an `IData` object.
+            </summary>
+            <remarks>
+            The idea here is that if you need to be using the JSON representation
+            of a mutable entity, it's going to be expensive to generate that JSON representation
+            each time it is accessed. This applies to XML also, but the case is felt to be
+            more likely with the JSON rep. So the purpose of the data-view is to take a snap-shot
+            of the entity, with the JSON being generated only the once. Unfortunately `JObject` is
+            muttable making it unfit for what is supposed to be an immutable view. A guard has been
+            put in to throw an exception on property change for the JObject, but this is felt to be
+            only just adequate long-term. I'm going to see how this plays out in actual usage
+            before deciding if it's appropriate. See `JDataObject` for an alternative but similar approach.
+            </remarks>
+        </member>
+        <member name="M:Inversion.DataView.#ctor(Inversion.IData)">
+            <summary>
+            Instantiates a new data view object.
+            </summary>
+            <param name="other">The `IData` the data view should be created from.</param>
+        </member>
+        <member name="M:Inversion.DataView.System#ICloneable#Clone">
+            <summary>
+            Creates a new object that is a copy of the current instance.
+            </summary>
+            <returns>
+            A new object that is a copy of this instance.
+            </returns>
+        </member>
+        <member name="M:Inversion.DataView.Clone">
+            <summary>
+            Creates a new object that is a copy of the current instance.
+            </summary>
+            <returns>
+            A new object that is a copy of this instance.
+            </returns>
+        </member>
+        <member name="M:Inversion.DataView.ToXml(System.Xml.XmlWriter)">
+            <summary>
+            Produces an xml representation of the model.
+            </summary>
+            <param name="writer">The writer to used to write the xml to. </param>
+        </member>
+        <member name="M:Inversion.DataView.ToJson(Newtonsoft.Json.JsonWriter)">
+            <summary>
+            Produces a json respresentation of the model.
+            </summary>
+            <param name="writer">The writer to use for producing json.</param>
+        </member>
+        <member name="P:Inversion.DataView.Data">
+            <summary>
+            Provides an abstract representation
+            of the objects data expressed as a JSON object.
+            </summary>
+        </member>
+        <member name="T:Inversion.Extensions.ArrayEx">
+            <summary>
+            An extension class providing extensions for arrays.
+            </summary>
+        </member>
+        <member name="M:Inversion.Extensions.ArrayEx.DeepClone``1(``0[])">
+            <summary>
+            A simple extension that constructs a new array from one
+            provided by calling `.Clone()` on each element of the
+            provided array.
+            </summary>
+            <typeparam name="T">The type of the array elements.</typeparam>
+            <param name="self">The array to act upon.</param>
+            <returns>Provides a new array with elements cloned from the originating array.</returns>
+        </member>
+        <member name="T:Inversion.Extensions.DictionaryEx">
+            <summary>
+            Utility extension methods provided for dictionaries.
+            </summary>
+        </member>
+        <member name="M:Inversion.Extensions.DictionaryEx.Import``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1})">
+            <summary>
+            Copies the elements from one dictionary to another.
+            </summary>
+            <typeparam name="TKey">The type of the dictionary keys.</typeparam>
+            <typeparam name="TValue">The type of the dictionary values.</typeparam>
+            <param name="self">The dictionary being acted on.</param>
+            <param name="other">The dictionary being copied from.</param>
+        </member>
+        <member name="M:Inversion.Extensions.DictionaryEx.ContentToXml(System.Collections.Generic.IDictionary{System.String,Inversion.IData},System.Xml.XmlWriter)">
+            <summary>
+            Produces an XML representation of the elements of a dictionary.
+            </summary>
+            <param name="self">The dictionary being acted upon.</param>
+            <param name="writer">
+            The <see cref="T:System.Xml.XmlWriter"/> the representation
+            is written to.
+            </param>
+        </member>
+        <member name="T:Inversion.Extensions.EnumerableEx">
+            <summary>
+            An extension class providing extensions for `IEnumerable{T}` objects.
+            </summary>
+        </member>
+        <member name="M:Inversion.Extensions.EnumerableEx.ToXml``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Produces an XML representation of an enumerable by iterating over
+            the elements of the enumerable and calling `.ToXml()` on them.
+            </summary>
+            <typeparam name="T">The type of elements in the enumerable.</typeparam>
+            <param name="self">The enumerable to act upon.</param>
+            <param name="label">The label of the enclosing element.</param>
+            <returns>An XML representation of the provided enumerable.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.EnumerableEx.ToXml``1(System.Collections.Generic.IEnumerable{``0},System.IO.TextWriter,System.String)">
+            <summary>
+            Produces an XML representation of an enumerable by iterating over
+            the elements of the enumerable and calling `.ToXml()` on them.
+            </summary>
+            <typeparam name="T">The type of elements in the enumerable.</typeparam>
+            <param name="self">The enumerable to act upon.</param>
+            <param name="writer">The text writer the XML should be written to.</param>
+            <param name="label">The label of the enclosing element.</param>
+        </member>
+        <member name="M:Inversion.Extensions.EnumerableEx.ToXml``1(System.Collections.Generic.IEnumerable{``0},System.Xml.XmlWriter,System.String)">
+            <summary>
+            Produces an XML representation of an enumerable by iterating over
+            the elements of the enumerable and calling `.ToXml()` on them.
+            </summary>
+            <typeparam name="T">The type of elements in the enumerable.</typeparam>
+            <param name="self">The enumerable to act upon.</param>
+            <param name="xml">The xml writer the XML should be written to.</param>
+            <param name="label">The label of the enclosing element.</param>
+        </member>
+        <member name="M:Inversion.Extensions.EnumerableEx.ToJson``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Produces a JSON representation of an enumerable by iterating over
+            the elements of the enumerable and calling `.ToJson()` on them.
+            </summary>
+            <typeparam name="T">The type of elements in the enumerable.</typeparam>
+            <param name="self">The enumerable to act upon.</param>
+            <returns>An JSON representation of the provided enumerable.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.EnumerableEx.ToJson``1(System.Collections.Generic.IEnumerable{``0},System.IO.TextWriter)">
+            <summary>
+            Produces a JSON representation of an enumerable by iterating over
+            the elements of the enumerable and calling `.ToJson()` on them.
+            </summary>
+            <typeparam name="T">The type of elements in the enumerable.</typeparam>
+            <param name="self">The enumerable to act upon.</param>
+            <param name="writer">The text writer the JSON should be written to.</param>
+        </member>
+        <member name="M:Inversion.Extensions.EnumerableEx.ToJson``1(System.Collections.Generic.IEnumerable{``0},Newtonsoft.Json.JsonWriter)">
+            <summary>
+            Produces a JSON representation of an enumerable by iterating over
+            the elements of the enumerable and calling `.ToJson()` on them.
+            </summary>
+            <typeparam name="T">The type of elements in the enumerable.</typeparam>
+            <param name="self">The enumerable to act upon.</param>
+            <param name="json">The json writer the JSON should be written to.</param>
+        </member>
+        <member name="T:Inversion.Extensions.ListEx">
+            <summary>
+            Utility extension methods provided for lists.
+            </summary>
+            <remarks>
+            Just some methods to allow a list to be treated as a stack.
+            If a stack is being used as a context in tree processing,
+            sometimes being able to peek at more than the last element,
+            or also treat the stack like a list is useful.
+            </remarks>
+        </member>
+        <member name="M:Inversion.Extensions.ListEx.Push``1(System.Collections.Generic.List{``0},``0)">
+            <summary>
+            Pushes an elelent onto the list as if it were a stack.
+            </summary>
+            <typeparam name="T">The type of the list elements.</typeparam>
+            <param name="self">The list being acted on.</param>
+            <param name="item">The element being pushed onto the list.</param>
+            <returns>The list being acted on.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.ListEx.Pop``1(System.Collections.Generic.List{``0})">
+            <summary>
+            Pops an element from the list as if it were a stack.
+            </summary>
+            <typeparam name="T">The type of the list elements.</typeparam>
+            <param name="self">The list being acted on.</param>
+            <returns>The element that was poped.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.ListEx.Peek``1(System.Collections.Generic.List{``0},System.Int32)">
+            <summary>
+            Provides an index of the list in reverse order,
+            with `list.Peek(0)` considering the last element
+            of the list, and `list.Peek(1)` being the penultimate
+            element of the list. No bounds checking is provided.
+            </summary>
+            <typeparam name="T">The type of the list elements.</typeparam>
+            <param name="self">The list being acted on.</param>
+            <param name="i">The index of the peek.</param>
+            <returns>The element found at the index.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.ListEx.Peek``1(System.Collections.Generic.List{``0})">
+            <summary>
+            Takes a look at the last element of a list without removing it,
+            as if it were a stack.
+            </summary>
+            <typeparam name="T">The type of the list elements.</typeparam>
+            <param name="self">The list being acted on.</param>
+            <returns>The last element of the list.</returns>
+        </member>
+        <member name="T:Inversion.Extensions.StringBuilderEx">
+            <summary>
+            Some utility extension methods provided for string builders.
+            </summary>
+        </member>
+        <member name="M:Inversion.Extensions.StringBuilderEx.Filter(System.Text.StringBuilder,System.Predicate{System.Char})">
+            <summary>
+            Filters a `StringBuilder`, removing any elements
+            that the provided predicate returns true for.
+            </summary>
+            <param name="self">The string builder being acted upon.</param>
+            <param name="test">The predicate to test each element for removal.</param>
+            <returns>The string builder being acted upon.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringBuilderEx.RemoveNonNumeric(System.Text.StringBuilder)">
+            <summary>
+            Removes all non-numeric characters from the string builder.
+            </summary>
+            <param name="self">The string builder being acted upon.</param>
+            <returns>The string builder being acted upon.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringBuilderEx.RemoveNonAlpha(System.Text.StringBuilder)">
+            <summary>
+            Removes all the non-alphabetic characters from the string builder.
+            </summary>
+            <param name="self">The string builder being acted upon.</param>
+            <returns>The string builder being acted upon.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringBuilderEx.RemoveNonAlphaNumeric(System.Text.StringBuilder)">
+            <summary>
+            Removes all non-alphanumeric characters from the string builder.
+            </summary>
+            <param name="self">The string builder being acted upon.</param>
+            <returns>The string builder being acted upon.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringBuilderEx.RemoveWhitespace(System.Text.StringBuilder)">
+            <summary>
+            Removes all whitespace from the string builder.
+            </summary>
+            <param name="self">The string builder being acted upon.</param>
+            <returns>The string builder being acted upon.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringBuilderEx.TrimLeftBy(System.Text.StringBuilder,System.Int32)">
+            <summary>
+            Removes a specified number of characters from the left-side
+            of the string builder.
+            </summary>
+            <param name="self">The string builder being acted upon.</param>
+            <param name="amount"></param>
+            <returns>The string builder being acted upon.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringBuilderEx.TrimRightBy(System.Text.StringBuilder,System.Int32)">
+            <summary>
+            Removes a specified number of characters from the right-side
+            of the string builder.
+            </summary>
+            <param name="self">The string builder being acted upon.</param>
+            <param name="amount"></param>
+            <returns>The string builder being acted upon.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringBuilderEx.TrimEndsBy(System.Text.StringBuilder,System.Int32)">
+            <summary>
+            Removes a specified number of characters from each end
+            of the string builder.
+            </summary>
+            <param name="self">The string builder being acted upon.</param>
+            <param name="amount"></param>
+            <returns>The string builder being acted upon.</returns>
+        </member>
+        <member name="T:Inversion.Extensions.StringEx">
+            <summary>
+            An extension class providing extensions for string.
+            </summary>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.HasValue(System.String)">
+            <summary>
+            Determines if the string is not null
+            and has a length greater than zero.
+            </summary>
+            <param name="self">The subject of extension.</param>
+            <returns>
+            Returns <b>true</b> if the string has a values;
+            otherwise returns <b>false</b>.
+            </returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.AssertHasValue(System.String,System.String)">
+            <summary>
+            Checks if a string has a value and if not
+            throws an <see cref="T:System.ArgumentNullException"/>.
+            </summary>
+            <param name="self">The subject of extension.</param>
+            <param name="message">
+            The message to use as part of the exception.
+            </param>
+            <seealso cref="M:Inversion.Extensions.StringEx.HasValue(System.String)"/>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.Prepend(System.String,System.Int32,System.Char)">
+            <summary>
+            Places the 
+            </summary>
+            <param name="self"></param>
+            <param name="number"></param>
+            <param name="character"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.IsXmlName(System.String)">
+            <summary>
+            Determines if a string is a valid XML tag name.
+            </summary>
+            <param name="self">The subject of extension.</param>
+            <returns>
+            Returns <b>true</b> if the string is a valid XML name;
+            otherwise, returns <b>false</b>.
+            </returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.Filter(System.String,System.Predicate{System.Char})">
+            <summary>
+            Filters out characters from string by testing them with a predicate.
+            </summary>
+            <param name="self">The string to act upon.</param>
+            <param name="test">The predicate to test each character with.</param>
+            <returns>Returns a new string containing only those charcters for which the test returned true.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.RemoveNonNumeric(System.String)">
+            <summary>
+            Produces a new string by removing all non-numeric characters from the sting provided.
+            </summary>
+            <param name="self">The string to act upon.</param>
+            <returns>The new filtered string.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.RemoveNonAlpha(System.String)">
+            <summary>
+            Produces a new string by removing all alphabetic characters from the sting provided.
+            </summary>
+            <param name="self">The string to act upon.</param>
+            <returns>The new filtered string.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.RemoveNonAlphaNumeric(System.String)">
+            <summary>
+            Produces a new string by removing all non-alpha-numeric characters from the sting provided.
+            </summary>
+            <param name="self">The string to act upon.</param>
+            <returns>The new filtered string.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.RemoveWhitespace(System.String)">
+            <summary>
+            Produces a new string by removing all whitespace characters from the sting provided.
+            </summary>
+            <param name="self">The string to act upon.</param>
+            <returns>The new filtered string.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.RemoveInvalidXmlCharacters(System.String)">
+            <summary>
+            This method ensures that the returned string has only valid XML unicode
+            charcters as specified in the XML 1.0 standard. For reference please see
+            http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char for the
+            standard reference.
+            </summary>
+            <param name="self">The string being acted upon.</param>
+            <returns>A copy of the input string with non-valid charcters removed.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.TrimLeftBy(System.String,System.Int32)">
+            <summary>
+            Removes characters from the left side of a string.
+            </summary>
+            <param name="self">The string to be acted upon.</param>
+            <param name="amount">The number of charcters to remove.</param>
+            <returns>Returns a new string with the characters removed.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.TrimRightBy(System.String,System.Int32)">
+            <summary>
+            Removes characters from the right side of a string.
+            </summary>
+            <param name="self">The string to be acted upon.</param>
+            <param name="amount">The number of charcters to remove.</param>
+            <returns>Returns a new string with the characters removed.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.TrimEndsBy(System.String,System.Int32)">
+            <summary>
+            Removes characters from the left and right sides of a string.
+            </summary>
+            <param name="self">The string to be acted upon.</param>
+            <param name="amount">The number of charcters to remove.</param>
+            <returns>Returns a new string with the characters removed.</returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.Hash(System.String)">
+            <summary>
+            Generates a simple hash for a string. 
+            </summary>
+            <remarks>
+            This hash is not asserted to be fit for any particular purpose
+            other than simple features where you just need a hash of a string.
+            </remarks>
+            <param name="self">The string to be acted upon.</param>
+            <returns>
+            Returns a simple hash of a string.
+            </returns>
+        </member>
+        <member name="M:Inversion.Extensions.StringEx.ReplaceKeys(System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Regards all occurrences of substrings starting and finishing with `|`
+            pipe charcters as potential keys, and if those keys occur within the
+            provided dictionary, replaces those keys in the provided text
+            with the corresposponding value in the dictionary.
+            </summary>
+            <remarks>
+            This is performed as a single scan of characters and should be used
+            in preference in those situations where you find yourself
+            doing multiple replacements on a large string, as this will do them in one go.
+            </remarks>
+            <param name="text">The text to act upon.</param>
+            <param name="kv">The dictionary of key-value pairs for substitution.</param>
+            <returns>Returns a new string with any matching keys replaced.</returns>
+        </member>
+        <member name="T:Inversion.JDataObject">
+            <summary>
+            Implements a `JObject` as an `IData` type.
+            </summary>
+            <remarks>
+            This is addressing a concern not disimilar to that being addressed by
+            `DataView` which is the presentation of data in abstract terms
+            especially for views or ad-hoc data.
+            </remarks>
+        </member>
+        <member name="M:Inversion.JDataObject.#ctor(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            Instantiates a new `JDataObject` from an other `JObject`.
+            </summary>
+            <param name="other">
+            The `JObject` to copy data from.
+            </param>
+        </member>
+        <member name="M:Inversion.JDataObject.#ctor(Inversion.IData)">
+            <summary>
+            Instantiates a new `JDataObject` from another `IDataObject`.
+            </summary>
+            <param name="other">
+            The `IData` object to copy data from.
+            </param>
+        </member>
+        <member name="M:Inversion.JDataObject.ToXml(System.Xml.XmlWriter)">
+            <summary>
+            Produces an xml representation of the model.
+            </summary>
+            <param name="writer">The writer to used to write the xml to. </param>
+        </member>
+        <member name="M:Inversion.JDataObject.ToJson(Newtonsoft.Json.JsonWriter)">
+            <summary>
+            Produces a json respresentation of the model.
+            </summary>
+            <param name="writer">The writer to use for producing json.</param>
+        </member>
+        <member name="P:Inversion.JDataObject.Data">
+            <summary>
+            Provides an abstract representation
+            of the objects data expressed as a JSON object.
+            </summary>
+        </member>
+        <member name="T:Inversion.TextData">
+            <summary>
+            An implementation of <see cref="T:Inversion.IData"/> that
+            represents a simple text node within a model.
+            </summary>
+        </member>
+        <member name="M:Inversion.TextData.op_Implicit(System.String)~Inversion.TextData">
+            <summary>
+            Implicitly casts a string of text into a `TextData` object,
+            by instantiating a `TextData` object from the string.
+            </summary>
+            <param name="text">The string of text to be cast.</param>
+            <returns>
+            Returns the `TextData` object created.
+            </returns>
+        </member>
+        <member name="M:Inversion.TextData.op_Implicit(Inversion.TextData)~System.String">
+            <summary>
+            Implicitly casts a `TextData` object into a string.
+            </summary>
+            <param name="text">The `TextData` object to cast.</param>
+            <returns>Returns the string value of the `TextData` object.</returns>
+        </member>
+        <member name="M:Inversion.TextData.#ctor(System.String)">
+            <summary>
+            Instantiates a new `TextData` object with the value
+            of the text provided.
+            </summary>
+            <param name="text">The text to initialise from.</param>
+        </member>
+        <member name="M:Inversion.TextData.#ctor(Inversion.TextData)">
+            <summary>
+            Instantiates a new `TextData` object as a copy
+            of the one provided.
+            </summary>
+            <param name="text">The `TextData` to copy.</param>
+        </member>
+        <member name="M:Inversion.TextData.Clone">
+            <summary>
+            Creates a new instance as a copy
+            of the original.
+            </summary>
+            <returns>
+            A copy as a `TextData` object.
+            </returns>
+        </member>
+        <member name="M:Inversion.TextData.ToXml(System.Xml.XmlWriter)">
+            <summary>
+            Produces an xml representation of the text data.
+            </summary>
+            <param name="writer">The xml writer the representation should be written to.</param>
+        </member>
+        <member name="M:Inversion.TextData.ToJson(Newtonsoft.Json.JsonWriter)">
+            <summary>
+            Produces a json representation of the text data.
+            </summary>
+            <param name="writer">The json writer the representation should be written to.</param>
+        </member>
+        <member name="M:Inversion.TextData.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>
+            A string that represents the current object.
+            </returns>
+        </member>
+        <member name="P:Inversion.TextData.Value">
+            <summary>
+            The string value of the text data.
+            </summary>
+        </member>
+        <member name="P:Inversion.TextData.Data">
+            <summary>
+            Provides an abstract representation
+            of the objects data expressed as a JSON object.
+            </summary>
+            <remarks>
+            For this type the json object is only created the once.
+            </remarks>
+        </member>
+    </members>
+</doc>
