@@ -9,6 +9,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conclave.Map", "Conclave.Ma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conclave.Map.Store.SqlServer", "Conclave.Map.Store.SqlServer\Conclave.Map.Store.SqlServer.csproj", "{166A2F48-389E-4148-AEE5-132E7195C275}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conclave.Map.Store.MySql", "Conclave.Map.Store.MySql\Conclave.Map.Store.MySql.csproj", "{970C4B20-C18D-499D-975B-143D22D12B98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conclave.Map.Store.Mongo", "Conclave.Map.Store.Mongo\Conclave.Map.Store.Mongo.csproj", "{F0A00D47-3FE3-44C3-A99D-F0DC094CFB6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conclave.Cms", "Conclave.Cms\Conclave.Cms.csproj", "{3230553C-BCC4-48E0-9784-52254516870F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conclave.Funder", "Conclave.Funder\Conclave.Funder.csproj", "{97C26B5C-C16E-4316-A6CD-DBE7146BE6E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +35,22 @@ Global
 		{166A2F48-389E-4148-AEE5-132E7195C275}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{166A2F48-389E-4148-AEE5-132E7195C275}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{166A2F48-389E-4148-AEE5-132E7195C275}.Release|Any CPU.Build.0 = Release|Any CPU
+		{970C4B20-C18D-499D-975B-143D22D12B98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{970C4B20-C18D-499D-975B-143D22D12B98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{970C4B20-C18D-499D-975B-143D22D12B98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{970C4B20-C18D-499D-975B-143D22D12B98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0A00D47-3FE3-44C3-A99D-F0DC094CFB6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0A00D47-3FE3-44C3-A99D-F0DC094CFB6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0A00D47-3FE3-44C3-A99D-F0DC094CFB6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0A00D47-3FE3-44C3-A99D-F0DC094CFB6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3230553C-BCC4-48E0-9784-52254516870F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3230553C-BCC4-48E0-9784-52254516870F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3230553C-BCC4-48E0-9784-52254516870F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3230553C-BCC4-48E0-9784-52254516870F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97C26B5C-C16E-4316-A6CD-DBE7146BE6E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97C26B5C-C16E-4316-A6CD-DBE7146BE6E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97C26B5C-C16E-4316-A6CD-DBE7146BE6E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97C26B5C-C16E-4316-A6CD-DBE7146BE6E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

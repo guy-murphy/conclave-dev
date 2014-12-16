@@ -34,7 +34,7 @@
       <HintPath>..\lib\Inversion.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data">
-      <HintPath>..\lib\MySql.Data.dll</HintPath>
+      <HintPath>..\packages\MySql.Data.6.9.5\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,6 +57,10 @@
       <Project>{06FA9C5E-1272-45B8-856E-F0EF2793435C}</Project>
       <Name>Conclave.Map</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -101,38 +101,35 @@ namespace Conclave.Data.Store {
 			return parameter;
 		}
 
-        protected virtual IDbDataParameter _parameter(string name, bool value)
-        {
-            IDbDataParameter parameter = _factory.CreateParameter();
-            if (parameter == null) throw new StoreProcessException("Unable to obtain a parameter object from the factory.");
+		protected virtual IDbDataParameter _parameter(string name, bool value) {
+			IDbDataParameter parameter = _factory.CreateParameter();
+			if (parameter == null) throw new StoreProcessException("Unable to obtain a parameter object from the factory.");
 
-            parameter.DbType = DbType.Boolean;
-            parameter.ParameterName = name;
-            parameter.Value = value;
-            return parameter;
-        }
+			parameter.DbType = DbType.Boolean;
+			parameter.ParameterName = name;
+			parameter.Value = value;
+			return parameter;
+		}
 
-        protected virtual IDbDataParameter _parameter(string name, Guid value)
-        {
-            IDbDataParameter parameter = _factory.CreateParameter();
-            if (parameter == null) throw new StoreProcessException("Unable to obtain a parameter object from the factory.");
+		protected virtual IDbDataParameter _parameter(string name, Guid value) {
+			IDbDataParameter parameter = _factory.CreateParameter();
+			if (parameter == null) throw new StoreProcessException("Unable to obtain a parameter object from the factory.");
 
-            parameter.DbType = DbType.Guid;
-            parameter.ParameterName = name;
-            parameter.Value = value;
-            return parameter;
-        }
+			parameter.DbType = DbType.Guid;
+			parameter.ParameterName = name;
+			parameter.Value = value;
+			return parameter;
+		}
 
-        protected virtual IDbDataParameter _parameterNull(string name, DbType dbType)
-        {
-            IDbDataParameter parameter = _factory.CreateParameter();
-            if (parameter == null) throw new StoreProcessException("Unable to obtain a parameter object from the factory.");
+		protected virtual IDbDataParameter _parameterNull(string name, DbType dbType) {
+			IDbDataParameter parameter = _factory.CreateParameter();
+			if (parameter == null) throw new StoreProcessException("Unable to obtain a parameter object from the factory.");
 
-            parameter.DbType = dbType;
-            parameter.ParameterName = name;
-            parameter.Value = DBNull.Value;
-            return parameter;
-        }
+			parameter.DbType = dbType;
+			parameter.ParameterName = name;
+			parameter.Value = DBNull.Value;
+			return parameter;
+		}
 
 		protected virtual IDbDataParameter[] _sanitiseParameters(params IDbDataParameter[] parms) {
 			foreach (IDbDataParameter parm in parms) {
@@ -275,35 +272,28 @@ namespace Conclave.Data.Store {
 			}
 		}
 
-        /// <summary>
-        /// Executes a scalar SQL query against the server and returns the result.
-        /// </summary>
-        /// <param name="sql">The SQL statement to be executed against the server.</param>
-        /// <param name="parameters">The parameters for the SQL statement.</param>
-        /// <returns>The resulting object from the query.</returns>
+		/// <summary>
+		/// Executes a scalar SQL query against the server and returns the result.
+		/// </summary>
+		/// <param name="sql">The SQL statement to be executed against the server.</param>
+		/// <param name="parameters">The parameters for the SQL statement.</param>
+		/// <returns>The resulting object from the query.</returns>
 
-        public virtual object Scalar(string sql, params IDbDataParameter[] parameters)
-        {
-            using (IDbCommand command = this.CreateCommand(sql))
-            {
-                foreach (IDbDataParameter parameter in parameters)
-                {
-                    command.Parameters.Add(parameter);
-                }
-                try
-                {
-                    return command.ExecuteScalar();
-                }
-                catch
-                {
-                    if (this.InTransaction)
-                    {
-                        _transaction.Rollback();
-                    }
-                    throw;
-                }
-            }
-        }
+		public virtual object Scalar(string sql, params IDbDataParameter[] parameters) {
+			using (IDbCommand command = this.CreateCommand(sql)) {
+				foreach (IDbDataParameter parameter in parameters) {
+					command.Parameters.Add(parameter);
+				}
+				try {
+					return command.ExecuteScalar();
+				} catch {
+					if (this.InTransaction) {
+						_transaction.Rollback();
+					}
+					throw;
+				}
+			}
+		}
 
 		/// <summary>
 		/// Executes a scalar SQL query against the server and returns the result.
@@ -325,8 +315,7 @@ namespace Conclave.Data.Store {
 		/// <returns>The <see cref="DataSet"/> of the query results.</returns>
 
 		public virtual DataSet Query(string sql) {
-			DataSet data = new DataSet
-			{
+			DataSet data = new DataSet {
 				Locale = System.Globalization.CultureInfo.InvariantCulture
 			};
 			IDbDataAdapter adapter = this.CreateAdapter(sql);
@@ -345,8 +334,7 @@ namespace Conclave.Data.Store {
 		/// <returns>The <see cref="DataSet"/> of the query results.</returns>
 
 		public virtual DataSet Query(string sql, params IDbDataParameter[] parameters) {
-			DataSet data = new DataSet
-			{
+			DataSet data = new DataSet {
 				Locale = System.Globalization.CultureInfo.InvariantCulture
 			};
 			IDbDataAdapter adapter = this.CreateAdapter(sql);

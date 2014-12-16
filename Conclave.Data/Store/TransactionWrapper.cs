@@ -9,6 +9,14 @@ namespace Conclave.Data.Store {
 		private bool _isRolledBack;
 		private bool _isCommited;
 
+		public IDbConnection Connection {
+			get { return _store.Connection; }
+		}
+
+		public IsolationLevel IsolationLevel {
+			get { return IsolationLevel.ReadCommitted; }
+		}
+
 		public TransactionWrapper(SqlStore store) {
 			_store = store;
 			_store.BeginTransaction();
@@ -35,19 +43,9 @@ namespace Conclave.Data.Store {
 			_isDisposed = true;
 		}
 
-		#region IDbTransaction Members
-
 		public void Commit() {
 			_store.CommitTransaction();
 			_isCommited = true;
-		}
-
-		public IDbConnection Connection {
-			get { return _store.Connection; }
-		}
-
-		public IsolationLevel IsolationLevel {
-			get { return IsolationLevel.ReadCommitted; }
 		}
 
 		public void Rollback() {
@@ -55,6 +53,5 @@ namespace Conclave.Data.Store {
 			_isRolledBack = true;
 		}
 
-		#endregion
 	}
 }

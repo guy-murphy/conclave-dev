@@ -9,9 +9,9 @@ using Conclave.Map.Model;
 using Inversion.Collections;
 
 namespace Conclave.Map.Store {
-	public abstract class SqlTopicStore: SqlStore, ITopicStore {
+	public abstract class SqlTopicStore : SqlStore, ITopicStore {
 
-		protected SqlTopicStore(DbProviderFactory instance, string connStr) : base(instance, connStr) {}
+		protected SqlTopicStore(DbProviderFactory instance, string connStr) : base(instance, connStr) { }
 
 		// move to extension
 		protected IEnumerable<Topic.Builder> ProcessTopicQuery(string sql, params IDbDataParameter[] parms) {
@@ -38,8 +38,7 @@ namespace Conclave.Map.Store {
 					assocId = reader.ReadString("assoc_id");
 					if (currentAssoc == null && assocId != null || currentAssoc != null && currentAssoc.Id != assocId) {
 						// we have a new assoc
-						currentAssoc = new Association.Builder()
-						{
+						currentAssoc = new Association.Builder() {
 							Id = assocId,
 							Parent = reader.ReadString("assoc_parent"),
 							Type = reader.ReadString("assoc_type"),
@@ -52,8 +51,7 @@ namespace Conclave.Map.Store {
 					// check for occurence data
 					occurParent = reader.ReadString("occur_parent");
 					if (occurParent != null) { // test that this is an adequate guard
-						currentOccur = new Occurrence.Builder()
-						{
+						currentOccur = new Occurrence.Builder() {
 							Parent = reader.ReadString("occur_parent"),
 							Scope = reader.ReadString("occur_scope"),
 							Role = reader.ReadString("occur_role"),
@@ -67,8 +65,7 @@ namespace Conclave.Map.Store {
 					topicMetaParent = reader.ReadString("topic_meta_parent");
 					if (topicMetaParent != null) { // test that this is an adequate guard
 						// we have topic metadata
-						currentTopicMeta = new Metadata.Builder()
-						{
+						currentTopicMeta = new Metadata.Builder() {
 							Parent = topicMetaParent,
 							Scope = reader.ReadString("topic_meta_scope"),
 							Name = reader.ReadString("topic_meta_name"),
@@ -80,8 +77,7 @@ namespace Conclave.Map.Store {
 					assocMetaParent = reader.ReadString("assoc_meta_parent");
 					if (assocMetaParent != null && currentAssoc != null) {
 						// we have topic metadata
-						currentAssocMeta = new Metadata.Builder()
-						{
+						currentAssocMeta = new Metadata.Builder() {
 							Parent = assocMetaParent,
 							Scope = reader.ReadString("assoc_meta_scope"),
 							Name = reader.ReadString("assoc_meta_name"),
@@ -166,7 +162,7 @@ namespace Conclave.Map.Store {
 		}
 
 		protected abstract void SetOccurrence(string parent, string scope, string role, string behaviour, string reference,
-		                             byte[] data = null, bool check = true);
+									 byte[] data = null, bool check = true);
 
 		public virtual Occurrence GetOccurrence(string parent, string role, string behaviour, string reference) {
 			return this.GetOccurrence(parent, "default", role, behaviour, reference);
@@ -295,11 +291,13 @@ namespace Conclave.Map.Store {
 		/// <param name="topic">The topic to add to the store.</param>
 
 		public void AddTopic(Topic topic) {
-			this.RemoveTopic(topic.Id);
-			this.CreateTopic(topic.Id);
-			this.AddMetadata(topic.Metadata, false);
-			this.AddOccurrences(topic.Occurrences, false);
-			this.AddAssociations(topic.Associations, false);
+			using (this.Transaction) {
+				this.RemoveTopic(topic.Id);
+				this.CreateTopic(topic.Id);
+				this.AddMetadata(topic.Metadata, false);
+				this.AddOccurrences(topic.Occurrences, false);
+				this.AddAssociations(topic.Associations, false);
+			}
 		}
 
 		public abstract Topic GetTopic(string id);
