@@ -137,6 +137,11 @@ namespace Conclave.Funder.Model {
 			return _hashcode;
 		}
 
+		public Goal Mutate(Func<Builder, Goal> mutator) {
+			Builder builder = new Builder(this);
+			return mutator(builder);
+		}
+
 		/// <summary>
 		/// Produces an xml representation of the model.
 		/// </summary>

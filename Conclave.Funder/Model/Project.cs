@@ -8,7 +8,7 @@ using Conclave.Map.Model;
 namespace Conclave.Funder.Model {
 	public class Project: Node, IData {
 
-		private int _hashcode = 0;
+		//private int _hashcode = 0;
 		private JObject _data;
 
 		/// <summary>

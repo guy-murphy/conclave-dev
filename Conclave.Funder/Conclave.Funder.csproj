@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Model\Goal.cs" />
     <Compile Include="Model\Project.cs" />
+    <Compile Include="Model\ScopedData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
