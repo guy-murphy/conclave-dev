@@ -124,15 +124,15 @@ namespace Conclave.Funder.Model {
 
 		public override int GetHashCode() {
 			if (_hashcode == 0) {
-				_hashcode = 1;
-				_hashcode = _hashcode * 31 + "Goal::".GetHashCode();
-				_hashcode = _hashcode * 31 + this.Id.GetHashCode();
-				_hashcode = _hashcode * 31 + this.Parent.GetHashCode();
-				_hashcode = _hashcode * 31 + this.Previous.GetHashCode();
-				_hashcode = _hashcode * 31 + this.Next.GetHashCode();
-				_hashcode = _hashcode * 31 + this.Start.GetHashCode();
-				_hashcode = _hashcode * 31 + this.End.GetHashCode();
-				_hashcode = _hashcode * 31 + this.Amount.GetHashCode();
+				int hc =  "Goal".GetHashCode();
+				hc = hc * 31 + this.Id.GetHashCode();
+				hc = hc * 31 + this.Parent.GetHashCode();
+				hc = hc * 31 + this.Previous.GetHashCode();
+				hc = hc * 31 + this.Next.GetHashCode();
+				hc = hc * 31 + this.Start.GetHashCode();
+				hc = hc * 31 + this.End.GetHashCode();
+				hc = hc * 31 + this.Amount.GetHashCode();
+				_hashcode = hc;
 			}
 			return _hashcode;
 		}
@@ -192,10 +192,10 @@ namespace Conclave.Funder.Model {
 				return new Builder(goal);
 			}
 
-			public static ImmutableHashSet<Goal> CreateImmutableCollection(IEnumerable<Goal.Builder> occurrence) {
+			public static ImmutableHashSet<Goal> CreateImmutableCollection(IEnumerable<Goal.Builder> goal) {
 				HashSet<Goal> temp = new HashSet<Goal>();
-				if (occurrence != null) {
-					foreach (Goal item in occurrence) {
+				if (goal != null) {
+					foreach (Goal item in goal) {
 						temp.Add(item);
 					}
 				}
@@ -210,7 +210,7 @@ namespace Conclave.Funder.Model {
 			public DateTime End { get; set; }
 			public decimal Amount { get; set; }
 
-			public Builder() { }
+			public Builder(): this(String.Empty, String.Empty, String.Empty, String.Empty, default(DateTime), default(DateTime), default(decimal)) { }
 
 			public Builder(string id, string parent, DateTime start, DateTime end, decimal amount)
 				: this(id, parent, String.Empty, String.Empty, start, end, amount) { }

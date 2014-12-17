@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Conclave.Map.Model {
-	public class Metadata : IData, IEquatable<Metadata> {
+	public sealed class Metadata : IData, IEquatable<Metadata> {
 
 		public static bool operator ==(Metadata m1, Metadata m2) {
 			if (Object.ReferenceEquals(m1, m2)) return true;
@@ -118,20 +118,20 @@ namespace Conclave.Map.Model {
 			return mutator(builder);
 		}
 
-		public virtual void ContentToXml(XmlWriter writer) {
+		public void ContentToXml(XmlWriter writer) {
 			writer.WriteAttributeString("for", this.Parent);
 			writer.WriteAttributeString("scope", this.Scope);
 			writer.WriteAttributeString("name", this.Name);
 			writer.WriteAttributeString("value", this.Value);
 		}
 
-		public virtual void ToXml(XmlWriter writer) {
+		public void ToXml(XmlWriter writer) {
 			writer.WriteStartElement("metadata");
 			this.ContentToXml(writer);
 			writer.WriteEndElement();
 		}
 
-		public virtual void ContentToJson(JsonWriter writer) {
+		public void ContentToJson(JsonWriter writer) {
 			writer.WritePropertyName("for");
 			writer.WriteValue(this.Parent);
 			writer.WritePropertyName("scope");
@@ -142,7 +142,7 @@ namespace Conclave.Map.Model {
 			writer.WriteValue(this.Value);
 		}
 
-		public virtual void ToJson(JsonWriter writer) {
+		public void ToJson(JsonWriter writer) {
 			writer.WriteStartObject();
 			writer.WritePropertyName("_type");
 			writer.WriteValue("metadata");

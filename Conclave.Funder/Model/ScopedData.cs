@@ -112,12 +112,13 @@ namespace Conclave.Funder.Model {
 
 		public override int GetHashCode() {
 			if (_hashcode == 0) {
-				_hashcode = "ScopedData".GetHashCode();
-				_hashcode = _hashcode * 31 + this.Id.GetHashCode();
-				_hashcode = _hashcode * 31 + this.Parent.GetHashCode();
-				_hashcode = _hashcode * 31 + this.Scope.GetHashCode();
-				_hashcode = _hashcode * 31 + this.Name.GetHashCode();
-				_hashcode = _hashcode * 31 + this.Value.GetHashCode();
+				int hc = "ScopedData".GetHashCode();
+				hc = hc * 31 + this.Id.GetHashCode();
+				hc = hc * 31 + this.Parent.GetHashCode();
+				hc = hc * 31 + this.Scope.GetHashCode();
+				hc = hc * 31 + this.Name.GetHashCode();
+				hc = hc * 31 + this.Value.GetHashCode();
+				_hashcode = hc;
 			}
 			return _hashcode;
 		}
@@ -189,6 +190,9 @@ namespace Conclave.Funder.Model {
 			public Builder() {
 				this.Id = Guid.NewGuid().ToString();
 				this.Scope = "default";
+				this.Parent = String.Empty;
+				this.Name = String.Empty;
+				this.Value = String.Empty;
 			}
 
 			public Builder(ScopedData ScopedData) {

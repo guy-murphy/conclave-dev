@@ -50,7 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\AgentScopedData.cs" />
     <Compile Include="Model\Goal.cs" />
+    <Compile Include="Model\JournalEntry.cs" />
+    <Compile Include="Model\Locator.cs" />
     <Compile Include="Model\Project.cs" />
     <Compile Include="Model\ScopedData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

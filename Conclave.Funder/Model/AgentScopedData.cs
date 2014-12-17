@@ -2,7 +2,8 @@
 using System.Collections.Immutable;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Xml;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using Inversion;
@@ -76,11 +77,37 @@ namespace Conclave.Funder.Model {
 
 		public override int GetHashCode() {
 			if (_hashcode == 0) {
-				_hashcode = "AgentScopedData".GetHashCode();
-				_hashcode = _hashcode * 31 + base.GetHashCode();
-				_hashcode = _hashcode * 31 + this.Id.GetHashCode();
+				int hc = "AgentScopedData".GetHashCode();
+				hc = hc * 31 + base.GetHashCode();
+				hc = hc * 31 + this.Who.GetHashCode();
+				_hashcode = hc;
 			}
 			return _hashcode;
+		}
+
+		public override void ContentToXml(XmlWriter writer) {
+			base.ContentToXml(writer);
+			writer.WriteAttributeString("who", this.Who);
+		}
+
+		public override void ToXml(XmlWriter writer) {
+			writer.WriteStartElement("agent-scoped-data");
+			this.ContentToXml(writer);
+			writer.WriteEndElement();
+		}
+
+		public override void ContentToJson(JsonWriter writer) {
+			base.ContentToJson(writer);
+			writer.WritePropertyName("who");
+			writer.WriteValue(this.Who);
+		}
+
+		public override void ToJson(JsonWriter writer) {
+			writer.WriteStartObject();
+			writer.WritePropertyName("_type");
+			writer.WriteValue("agentScopedData");
+			this.ContentToJson(writer);
+			writer.WriteEndObject();
 		}
 
 		public new class Builder : ScopedData.Builder {
@@ -103,6 +130,9 @@ namespace Conclave.Funder.Model {
 
 			public string Who { get; set; }
 
+			public Builder() : base() {
+				this.Who = String.Empty;
+			}
 			public Builder(string parent, string who, string name, string value) : this(parent, who, "default", name, value) { }
 			public Builder(string parent, string who, string scope, string name, string value) : this(Guid.NewGuid().ToString(), parent, who, scope, name, value) { }
 
@@ -114,7 +144,7 @@ namespace Conclave.Funder.Model {
 			public Builder(AgentScopedData other) {
 				this.FromAgentScopedData(other);
 			}
-
+			
 			public Builder FromAgentScopedData(AgentScopedData other) {
 				base.FromScopedData(other);
 				this.Who = other.Who;
