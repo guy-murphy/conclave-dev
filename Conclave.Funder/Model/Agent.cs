@@ -84,7 +84,8 @@ namespace Conclave.Funder.Model {
 
 		public override int GetHashCode() {
 			if (_hashcode == 0) {
-				int hc = base.GetHashCode();
+				int hc = 17;
+				hc = hc * 31 + base.GetHashCode();
 				foreach (Metadata item in this.Names) {
 					hc = hc * 31 + item.GetHashCode();
 				}
@@ -158,9 +159,19 @@ namespace Conclave.Funder.Model {
 				return new Builder(agent);
 			}
 
+			public static ImmutableHashSet<Agent> CreateImmutableCollection(IEnumerable<Agent.Builder> meta) {
+				return meta.Select(builder => builder.ToAgent()).ToImmutableHashSet();
+			}
+
 			public HashSet<Metadata.Builder> Names { get; set; }
 			public HashSet<Metadata.Builder> Contacts { get; set; }
 			public HashSet<Metadata.Builder> Addresses { get; set; }
+
+			public Builder() {
+				this.Names = new HashSet<Metadata.Builder>();
+				this.Contacts = new HashSet<Metadata.Builder>();
+				this.Addresses = new HashSet<Metadata.Builder>();
+			}
 
 			public Builder(string id, IEnumerable<Metadata.Builder> meta, IEnumerable<Metadata.Builder> names, IEnumerable<Metadata.Builder> contacts,
 				IEnumerable<Metadata.Builder> addresses)
@@ -184,6 +195,18 @@ namespace Conclave.Funder.Model {
 
 			public Agent ToAgent() {
 				return new Agent(this.Id, this.Metadata.Cast<Metadata>(), this.Names.Cast<Metadata>(), this.Contacts.Cast<Metadata>(), this.Addresses.Cast<Metadata>());
+			}
+
+			public Builder FromJson(JObject json) {
+				if (json["_type"].Value<string>() != "scopedData") throw new InvalidOperationException("The json being used does not represent the type it is being read into.");
+
+				this.Id = json["id"].Value<string>();
+				this.Metadata = new HashSet<Metadata.Builder>(json["metadata"].Value<JArray>().Select(obj => new Metadata.Builder(obj.Value<JObject>())));
+				this.Names = new HashSet<Metadata.Builder>(json["names"].Value<JArray>().Select(obj => new Metadata.Builder(obj.Value<JObject>())));
+				this.Contacts = new HashSet<Metadata.Builder>(json["contacts"].Value<JArray>().Select(obj => new Metadata.Builder(obj.Value<JObject>())));
+				this.Addresses = new HashSet<Metadata.Builder>(json["addresses"].Value<JArray>().Select(obj => new Metadata.Builder(obj.Value<JObject>())));
+
+				return this;
 			}
 			
 		}

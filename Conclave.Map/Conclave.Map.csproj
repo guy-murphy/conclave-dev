@@ -54,6 +54,8 @@
   <ItemGroup>
     <Compile Include="Model\Association.cs" />
     <Compile Include="Model\EnumerableEx.cs" />
+    <Compile Include="Model\IConsumeData.cs" />
+    <Compile Include="Model\IMutate.cs" />
     <Compile Include="Model\Metadata.cs" />
     <Compile Include="Model\Node.cs" />
     <Compile Include="Model\Occurrence.cs" />

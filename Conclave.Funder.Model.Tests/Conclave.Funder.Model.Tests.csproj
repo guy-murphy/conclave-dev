@@ -59,11 +59,16 @@
   <ItemGroup>
     <Compile Include="ScopedDataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AgentTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Conclave.Funder\Conclave.Funder.csproj">
       <Project>{97C26B5C-C16E-4316-A6CD-DBE7146BE6E4}</Project>
       <Name>Conclave.Funder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Conclave.Map\Conclave.Map.csproj">
+      <Project>{06FA9C5E-1272-45B8-856E-F0EF2793435C}</Project>
+      <Name>Conclave.Map</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

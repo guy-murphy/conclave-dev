@@ -240,7 +240,7 @@ namespace Conclave.Map.Model {
 			}
 
 			public override Metadata.Builder AddMetadata(string scope, string name, string value) {
-				//if (this.Scope != scope) throw new InvalidOperationException("You may not add metadata to an Association with a different scope.");
+				if (this.Scope != scope) throw new InvalidOperationException("You may not add metadata to an Association with a different scope.");
 
 				return base.AddMetadata(scope, name, value);
 			}

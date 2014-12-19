@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Xml;
 
 using System.Collections.Immutable;
@@ -104,11 +105,13 @@ namespace Conclave.Map.Model {
 
 		public override int GetHashCode() {
 			if (_hashcode == 0) {
-				_hashcode = "Metadata".GetHashCode();
-				_hashcode = _hashcode * 31 + this.Parent.GetHashCode();
-				_hashcode = _hashcode * 31 + this.Scope.GetHashCode();
-				_hashcode = _hashcode * 31 + this.Name.GetHashCode();
-				_hashcode = _hashcode * 31 + this.Value.GetHashCode();
+				int hc = 17;
+				hc = hc * 31 + "Metadata".GetHashCode();
+				hc = hc * 31 + this.Parent.GetHashCode();
+				hc = hc * 31 + this.Scope.GetHashCode();
+				hc = hc * 31 + this.Name.GetHashCode();
+				hc = hc * 31 + this.Value.GetHashCode();
+				_hashcode = hc;
 			}
 			return _hashcode;
 		}
@@ -195,6 +198,10 @@ namespace Conclave.Map.Model {
 				this.FromMetadata(metadata);
 			}
 
+			public Builder(JObject json) {
+				this.FromJson(json);
+			}
+
 			public Builder(string parent, string scope, string name, string value) {
 				this.Parent = parent;
 				this.Scope = scope;
@@ -210,9 +217,20 @@ namespace Conclave.Map.Model {
 
 				return this;
 			}
-
+			
 			public Metadata ToMetadata() {
 				return new Metadata(this.Parent, this.Scope, this.Name, this.Value);
+			}
+
+			public Builder FromJson(JObject json) {
+				if (json["_type"].Value<string>() != "metadata") throw new InvalidOperationException("The json being used does not represent the type it is being read into.");
+
+				this.Parent = json["for"].Value<string>();
+				this.Scope = json["scope"].Value<string>();
+				this.Name = json["name"].Value<string>();
+				this.Value = json["value"].Value<string>();
+
+				return this;
 			}
 		}
 

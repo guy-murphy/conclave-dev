@@ -4,12 +4,13 @@ using System.Xml;
 
 using System.Collections.Immutable;
 using System.Collections.Generic;
+using Conclave.Map.Model;
 using Inversion;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Conclave.Funder.Model {
-	public class ScopedData : IData, IEquatable<ScopedData> {
+	public class ScopedData : IData, IEquatable<ScopedData>, IMutate<ScopedData.Builder, ScopedData> {
 
 		public static bool operator ==(ScopedData m1, ScopedData m2) {
 			if (Object.ReferenceEquals(m1, m2)) return true;
@@ -164,10 +165,10 @@ namespace Conclave.Funder.Model {
 			writer.WriteEndObject();
 		}
 
-		public class Builder {
-
+		public class Builder: IConsumeData<Builder, ScopedData> {
+			
 			public static implicit operator ScopedData(Builder builder) {
-				return builder.ToScopedData();
+				return builder.ToConcrete();
 			}
 
 			public static implicit operator Builder(ScopedData scopedData) {
@@ -175,7 +176,7 @@ namespace Conclave.Funder.Model {
 			}
 
 			public static ImmutableHashSet<ScopedData> CreateImmutableCollection(IEnumerable<ScopedData.Builder> meta) {
-				return meta.Select(builder => builder.ToScopedData()).ToImmutableHashSet();				
+				return meta.Select(builder => builder.ToConcrete()).ToImmutableHashSet();				
 			}
 
 			public string Id { get; set; }
@@ -214,7 +215,7 @@ namespace Conclave.Funder.Model {
 				return this;
 			}
 
-			public ScopedData ToScopedData() {
+			public ScopedData ToConcrete() {
 				return new ScopedData(this.Id, this.Parent, this.Scope, this.Name, this.Value);
 			}
 
@@ -229,6 +230,7 @@ namespace Conclave.Funder.Model {
 
 				return this;
 			}
+
 		}
 
 	}
