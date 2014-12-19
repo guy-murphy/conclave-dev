@@ -42,12 +42,7 @@ namespace Conclave.Map.Model {
 			_id = id;
 			_meta = (meta == null) ? ImmutableHashSet.Create<Metadata>() : ImmutableHashSet.Create<Metadata>(meta.ToArray());
 		}
-
-		protected Node(string id, IEnumerable<Metadata.Builder> meta) {
-			_id = id;
-			_meta = meta.ToImmutable();
-		}
-
+		
 		protected Node(string id) {
 			_id = id;
 			_meta = ImmutableHashSet.Create<Metadata>();
@@ -68,11 +63,13 @@ namespace Conclave.Map.Model {
 
 		public override int GetHashCode() {
 			if (_hashcode == 0) {
-				_hashcode = "Node".GetHashCode();
-				_hashcode = _hashcode * 31 + this.Id.GetHashCode();
+				int hc = 17;
+				hc = hc * 31 + "Node".GetHashCode();
+				hc = hc * 31 + this.Id.GetHashCode();
 				foreach (Metadata meta in this.Metadata) {
-					_hashcode = _hashcode + 31 + meta.GetHashCode();
+					hc = hc * 31 + meta.GetHashCode();
 				}
+				_hashcode = hc;
 			}
 			return _hashcode;
 		}

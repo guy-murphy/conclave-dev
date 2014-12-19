@@ -204,7 +204,7 @@ namespace Conclave.Map.Model {
 			}
 
 			public Topic ToTopic() {
-				return new Topic(this.Id, this.Metadata.ToImmutable(), this.Associations.ToImmutable(), this.Occurrences.ToImmutable());
+				return new Topic(this.Id, this.Metadata.Cast<Metadata>(), this.Associations.Cast<Association>(), this.Occurrences.Cast<Occurrence>());
 			}
 
 			public Occurrence.Builder AddOccurrence(string role, string behaviour, string text) {

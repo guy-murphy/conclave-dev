@@ -79,6 +79,8 @@ namespace Conclave.Funder.Model {
 		public Goal(string id, string parent, DateTime start, DateTime end, decimal amount)
 			: this(id, parent, String.Empty, String.Empty, start, end, amount) { }
 
+		public Goal(string parent, DateTime start, DateTime end, decimal amount): this(Guid.NewGuid().ToString(), parent, start, end, amount) {}
+
 		public Goal(string id, string parent, string previous, string next, DateTime start, DateTime end, decimal amount) {
 			if (id == null) throw new ArgumentNullException("id");
 			if (parent == null) throw new ArgumentNullException("parent");
@@ -124,7 +126,8 @@ namespace Conclave.Funder.Model {
 
 		public override int GetHashCode() {
 			if (_hashcode == 0) {
-				int hc =  "Goal".GetHashCode();
+				int hc = 17;
+				hc = hc * 31 + "Goal".GetHashCode();
 				hc = hc * 31 + this.Id.GetHashCode();
 				hc = hc * 31 + this.Parent.GetHashCode();
 				hc = hc * 31 + this.Previous.GetHashCode();
@@ -192,14 +195,8 @@ namespace Conclave.Funder.Model {
 				return new Builder(goal);
 			}
 
-			public static ImmutableHashSet<Goal> CreateImmutableCollection(IEnumerable<Goal.Builder> goal) {
-				HashSet<Goal> temp = new HashSet<Goal>();
-				if (goal != null) {
-					foreach (Goal item in goal) {
-						temp.Add(item);
-					}
-				}
-				return ImmutableHashSet.Create<Goal>(temp.ToArray());
+			public static ImmutableHashSet<Goal> CreateImmutableCollection(IEnumerable<Goal.Builder> goals) {
+				return goals.Select(builder => builder.ToGoal()).ToImmutableHashSet();
 			}
 
 			public string Id { get; set; }
@@ -211,6 +208,8 @@ namespace Conclave.Funder.Model {
 			public decimal Amount { get; set; }
 
 			public Builder(): this(String.Empty, String.Empty, String.Empty, String.Empty, default(DateTime), default(DateTime), default(decimal)) { }
+
+			public Builder(string parent, DateTime start, DateTime end, decimal amount): this(Guid.NewGuid().ToString(), parent, start, end, amount) {}
 
 			public Builder(string id, string parent, DateTime start, DateTime end, decimal amount)
 				: this(id, parent, String.Empty, String.Empty, start, end, amount) { }

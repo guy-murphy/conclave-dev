@@ -77,7 +77,8 @@ namespace Conclave.Funder.Model {
 
 		public override int GetHashCode() {
 			if (_hashcode == 0) {
-				int hc = "AgentScopedData".GetHashCode();
+				int hc = 17;
+				hc = hc * 31 + "AgentScopedData".GetHashCode();
 				hc = hc * 31 + base.GetHashCode();
 				hc = hc * 31 + this.Who.GetHashCode();
 				_hashcode = hc;
@@ -121,11 +122,7 @@ namespace Conclave.Funder.Model {
 			}
 
 			public static ImmutableHashSet<AgentScopedData> CreateImmutableCollection(IEnumerable<AgentScopedData.Builder> meta) {
-				HashSet<AgentScopedData> temp = new HashSet<AgentScopedData>();
-				foreach (AgentScopedData item in meta) {
-					temp.Add(item);
-				}
-				return ImmutableHashSet.Create<AgentScopedData>(temp.ToArray());
+				return meta.Select(builder => builder.ToAgentScopedData()).ToImmutableHashSet();
 			}
 
 			public string Who { get; set; }

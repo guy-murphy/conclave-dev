@@ -232,7 +232,7 @@ namespace Conclave.Map.Model {
 			}
 
 			public Association ToAssociation() {
-				return new Association(this.Id, this.Metadata.ToImmutable(), this.Parent, this.Type, this.Scope, this.Reference, this.Role);
+				return new Association(this.Id, this.Metadata.Cast<Metadata>(), this.Parent, this.Type, this.Scope, this.Reference, this.Role);
 			}
 
 			public override Metadata.Builder AddMetadata(string name, string value) {

@@ -112,7 +112,8 @@ namespace Conclave.Funder.Model {
 
 		public override int GetHashCode() {
 			if (_hashcode == 0) {
-				int hc = "ScopedData".GetHashCode();
+				int hc = 17;
+				hc = hc * 31 + "ScopedData".GetHashCode();
 				hc = hc * 31 + this.Id.GetHashCode();
 				hc = hc * 31 + this.Parent.GetHashCode();
 				hc = hc * 31 + this.Scope.GetHashCode();
@@ -174,11 +175,7 @@ namespace Conclave.Funder.Model {
 			}
 
 			public static ImmutableHashSet<ScopedData> CreateImmutableCollection(IEnumerable<ScopedData.Builder> meta) {
-				HashSet<ScopedData> temp = new HashSet<ScopedData>();
-				foreach (ScopedData item in meta) {
-					temp.Add(item);
-				}
-				return ImmutableHashSet.Create<ScopedData>(temp.ToArray());
+				return meta.Select(builder => builder.ToScopedData()).ToImmutableHashSet();				
 			}
 
 			public string Id { get; set; }
@@ -187,18 +184,7 @@ namespace Conclave.Funder.Model {
 			public string Name { get; set; }
 			public string Value { get; set; }
 
-			public Builder() {
-				this.Id = Guid.NewGuid().ToString();
-				this.Scope = "default";
-				this.Parent = String.Empty;
-				this.Name = String.Empty;
-				this.Value = String.Empty;
-			}
-
-			public Builder(ScopedData ScopedData) {
-				this.FromScopedData(ScopedData);
-			}
-
+			public Builder() : this(Guid.NewGuid().ToString(),  String.Empty, String.Empty) {}
 			public Builder(string parent, string name, string value) : this(parent, "default", name, value) { }
 			public Builder(string parent, string scope, string name, string value) : this(Guid.NewGuid().ToString(), parent, scope, name, value) { }
 
@@ -208,6 +194,14 @@ namespace Conclave.Funder.Model {
 				this.Scope = scope;
 				this.Name = name;
 				this.Value = value;
+			}
+
+			public Builder(ScopedData ScopedData) {
+				this.FromScopedData(ScopedData);
+			}
+
+			public Builder(JObject json) {
+				this.FromJson(json);
 			}
 
 			public Builder FromScopedData(ScopedData other) {
@@ -222,6 +216,18 @@ namespace Conclave.Funder.Model {
 
 			public ScopedData ToScopedData() {
 				return new ScopedData(this.Id, this.Parent, this.Scope, this.Name, this.Value);
+			}
+
+			public Builder FromJson(JObject json) {
+				if (json["_type"].Value<string>() != "scopedData") throw new InvalidOperationException("The json being used does not represent the type it is being read into.");
+
+				this.Id = json["id"].Value<string>();
+				this.Parent = json["for"].Value<string>();
+				this.Scope = json["scope"].Value<string>();
+				this.Name = json["name"].Value<string>();
+				this.Value = json["value"].Value<string>();
+
+				return this;
 			}
 		}
 

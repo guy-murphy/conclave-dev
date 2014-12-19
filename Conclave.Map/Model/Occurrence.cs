@@ -165,7 +165,7 @@ namespace Conclave.Map.Model {
 
 		public override int GetHashCode() {
 			if (_hashcode == 0) {
-				_hashcode = 1;
+				_hashcode = 17;
 				_hashcode = _hashcode * 31 + "Occurrence::".GetHashCode();
 				_hashcode = _hashcode * 31 + this.Parent.GetHashCode();
 				_hashcode = _hashcode * 31 + this.Scope.GetHashCode();

@@ -792,6 +792,14 @@
             <param name="self">The enumerable to act upon.</param>
             <param name="json">The json writer the JSON should be written to.</param>
         </member>
+        <member name="M:Inversion.Extensions.EnumerableEx.CalculateHash(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Produces a hash from all the string elements
+            of an enumerable.
+            </summary>
+            <param name="self">The enumerable of strings to act upon.</param>
+            <returns>Returns a has of all the elements.</returns>
+        </member>
         <member name="T:Inversion.Extensions.ListEx">
             <summary>
             Utility extension methods provided for lists.

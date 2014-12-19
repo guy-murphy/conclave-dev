@@ -155,14 +155,8 @@ namespace Conclave.Funder.Model {
 				return new Builder(loc);
 			}
 
-			public static ImmutableHashSet<Locator> CreateImmutableCollection(IEnumerable<Locator.Builder> loc) {
-				HashSet<Locator> temp = new HashSet<Locator>();
-				if (loc != null) {
-					foreach (Locator item in loc) {
-						temp.Add(item);
-					}
-				}
-				return ImmutableHashSet.Create<Locator>(temp.ToArray());
+			public static ImmutableHashSet<Locator> CreateImmutableCollection(IEnumerable<Locator.Builder> locs) {
+				return locs.Select(builder => builder.ToLocator()).ToImmutableHashSet();
 			}
 
 			public string Id { get; set; }
@@ -171,9 +165,33 @@ namespace Conclave.Funder.Model {
 			public string Role { get; set; }
 			public string Reference { get; set; }
 
+
+			public Builder() : this(String.Empty, String.Empty, String.Empty, String.Empty, String.Empty) {}
+			public Builder(string parent, string scope, string role, string reference) : this(Guid.NewGuid().ToString(), parent, scope, role, reference) { }
+
 			public Builder(string id, string parent, string scope, string role, string reference) {
-				this.Id= id;
+				this.Id = id;
 				this.Parent = parent;
+				this.Scope = scope;
+				this.Role = role;
+				this.Reference = reference;
+			}
+
+			public Builder(Locator loc) {
+				this.FromLocator(loc);
+			}
+
+			public Builder FromLocator(Locator other) {
+				this.Id = other.Id;
+				this.Parent = other.Parent;
+				this.Scope = other.Scope;
+				this.Role = other.Role;
+				this.Reference = other.Reference;
+				return this;
+			}
+
+			public Locator ToLocator() {
+				return new Locator(this.Id, this.Parent, this.Scope, this.Role, this.Reference);
 			}
 
 		}
