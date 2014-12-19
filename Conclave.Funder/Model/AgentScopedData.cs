@@ -143,7 +143,7 @@ namespace Conclave.Funder.Model {
 			}
 			
 			public Builder FromAgentScopedData(AgentScopedData other) {
-				base.FromScopedData(other);
+				base.FromConcrete(other);
 				this.Who = other.Who;
 				return this;
 			}

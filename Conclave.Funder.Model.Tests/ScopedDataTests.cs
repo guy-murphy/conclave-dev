@@ -53,7 +53,7 @@ namespace Conclave.Funder.Model.Tests {
 					""name"": ""name-1"",
 					""value"": ""value-1""
 				}",
-				 mutator: (sd) => {
+				 mutator: sd => {
 					 sd.Id = "id-1";
 					 sd.Parent = "parent-1";
 					 sd.Scope = "scope-1";

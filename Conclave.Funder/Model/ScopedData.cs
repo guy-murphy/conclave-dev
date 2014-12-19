@@ -197,15 +197,15 @@ namespace Conclave.Funder.Model {
 				this.Value = value;
 			}
 
-			public Builder(ScopedData ScopedData) {
-				this.FromScopedData(ScopedData);
+			public Builder(ScopedData scopedData) {
+				this.FromConcrete(scopedData);
 			}
 
 			public Builder(JObject json) {
 				this.FromJson(json);
 			}
-
-			public Builder FromScopedData(ScopedData other) {
+			
+			public Builder FromConcrete(ScopedData other) {
 				this.Id = other.Id;
 				this.Parent = other.Parent;
 				this.Scope = other.Scope;
