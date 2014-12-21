@@ -99,10 +99,10 @@ namespace Conclave.Funder.Model {
 			writer.WriteEndObject();
 		}
 
-		public new class Builder : AgentScopedData.Builder {
+		public new class Builder : AgentScopedData.Builder, IConsumeData<Builder, JournalEntry> {
 
 			public static implicit operator JournalEntry(Builder builder) {
-				return builder.ToJournalEntry();
+				return builder.ToConcrete();
 			}
 
 			public static implicit operator Builder(JournalEntry entry) {
@@ -131,16 +131,20 @@ namespace Conclave.Funder.Model {
 			}
 
 			public Builder(JournalEntry other) {
-				this.FromJournalEntry(other);
+				this.FromConcrete(other);
 			}
 
-			public Builder FromJournalEntry(JournalEntry other) {
-				base.FromAgentScopedData(other);
+			public Builder FromConcrete(JournalEntry other) {
+				base.FromConcrete(other);
 				this.When = other.When;
 				return this;
 			}
 
-			public JournalEntry ToJournalEntry() {
+			public Builder FromJson(JObject json) {
+				throw new NotImplementedException();
+			}
+
+			public new JournalEntry ToConcrete() {
 				return new JournalEntry(this.Id, this.Parent, this.Who, this.Scope, this.Name, this.Value, this.When);
 			}
 

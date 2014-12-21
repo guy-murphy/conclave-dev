@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -10,7 +11,7 @@ using Inversion;
 
 
 namespace Conclave.Funder.Model {
-	public class AgentScopedData : ScopedData, IEquatable<AgentScopedData> {
+	public class AgentScopedData : ScopedData, IEquatable<AgentScopedData>, IMutate<AgentScopedData.Builder, AgentScopedData> {
 
 		public static bool operator ==(AgentScopedData m1, AgentScopedData m2) {
 			if (Object.ReferenceEquals(m1, m2)) return true;
@@ -60,8 +61,7 @@ namespace Conclave.Funder.Model {
 			_who = who;
 		}
 		public AgentScopedData(AgentScopedData other) : this(other.Id, other.Parent, other.Who, other.Scope, other.Name, other.Value) { }
-
-
+		
 		public override bool Equals(object obj) {
 			AgentScopedData other = obj as AgentScopedData;
 			return (other != null) && this.Equals(other);
@@ -84,6 +84,11 @@ namespace Conclave.Funder.Model {
 				_hashcode = hc;
 			}
 			return _hashcode;
+		}
+
+		public AgentScopedData Mutate(Func<Builder, AgentScopedData> mutator) {
+			Builder builder = new Builder(this);
+			return mutator(builder);
 		}
 
 		public override void ContentToXml(XmlWriter writer) {
@@ -111,10 +116,10 @@ namespace Conclave.Funder.Model {
 			writer.WriteEndObject();
 		}
 
-		public new class Builder : ScopedData.Builder {
+		public new class Builder : ScopedData.Builder, IConsumeData<Builder, AgentScopedData> {
 
 			public static implicit operator AgentScopedData(Builder builder) {
-				return builder.ToAgentScopedData();
+				return builder.ToConcrete();
 			}
 
 			public static implicit operator Builder(AgentScopedData agentScopedData) {
@@ -122,7 +127,7 @@ namespace Conclave.Funder.Model {
 			}
 
 			public static ImmutableHashSet<AgentScopedData> CreateImmutableCollection(IEnumerable<AgentScopedData.Builder> meta) {
-				return meta.Select(builder => builder.ToAgentScopedData()).ToImmutableHashSet();
+				return meta.Select(builder => builder.ToConcrete()).ToImmutableHashSet();
 			}
 
 			public string Who { get; set; }
@@ -139,16 +144,29 @@ namespace Conclave.Funder.Model {
 			}
 
 			public Builder(AgentScopedData other) {
-				this.FromAgentScopedData(other);
+				this.FromConcrete(other);
 			}
 			
-			public Builder FromAgentScopedData(AgentScopedData other) {
+			public Builder FromConcrete(AgentScopedData other) {
 				base.FromConcrete(other);
 				this.Who = other.Who;
 				return this;
 			}
 
-			public AgentScopedData ToAgentScopedData() {
+			public new Builder FromJson(JObject json) {
+				if (json["_type"].Value<string>() != "agentScopedData") throw new InvalidOperationException("The json being used does not represent the type it is being read into.");
+
+				this.Id = json["id"].Value<string>();
+				this.Parent = json["for"].Value<string>();
+				this.Who = json["who"].Value<string>();
+				this.Scope = json["scope"].Value<string>();
+				this.Name = json["name"].Value<string>();
+				this.Value = json["value"].Value<string>();
+
+				return this;
+			}
+
+			public new AgentScopedData ToConcrete() {
 				return new AgentScopedData(this.Id, this.Parent, this.Who, this.Scope, this.Name, this.Value);
 			}
 

@@ -175,7 +175,7 @@ namespace Conclave.Funder.Model {
 				return new Builder(scopedData);
 			}
 
-			public static ImmutableHashSet<ScopedData> CreateImmutableCollection(IEnumerable<ScopedData.Builder> meta) {
+			public static ImmutableHashSet<ScopedData> CreateImmutableCollection(IEnumerable<Builder> meta) {
 				return meta.Select(builder => builder.ToConcrete()).ToImmutableHashSet();				
 			}
 
