@@ -183,7 +183,7 @@ namespace Conclave.Map.Model {
 
 		public void ToXml(XmlWriter writer) {
 			writer.WriteStartElement("occurrence");
-			writer.WriteAttributeString("for", this.Parent);
+			writer.WriteAttributeString("parent", this.Parent);
 			writer.WriteAttributeString("scope", this.Scope);
 			writer.WriteAttributeString("role", this.Role);
 			writer.WriteAttributeString("behaviour", this.Behaviour);
@@ -202,7 +202,7 @@ namespace Conclave.Map.Model {
 			writer.WriteStartObject();
 			writer.WritePropertyName("_type");
 			writer.WriteValue("occurrence");
-			writer.WritePropertyName("for");
+			writer.WritePropertyName("parent");
 			writer.WriteValue(this.Parent);
 			writer.WritePropertyName("scope");
 			writer.WriteValue(this.Scope);

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using Inversion;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+using Inversion;
 
 namespace Conclave.Funder.Model {
 	public class JournalEntry : AgentScopedData, IEquatable<JournalEntry> {
@@ -64,9 +64,8 @@ namespace Conclave.Funder.Model {
 		}
 
 		public override int GetHashCode() {
-			if (_hashcode == 0) {
-				int hc = 0;
-				hc = "JournalEntry".GetHashCode();
+			if (_hashcode == 0) {			
+				int hc = "JournalEntry".GetHashCode();
 				hc = hc * 31 + base.GetHashCode();
 				hc = hc * 31 + this.Who.GetHashCode();
 				_hashcode = hc;
@@ -140,8 +139,18 @@ namespace Conclave.Funder.Model {
 				return this;
 			}
 
-			public Builder FromJson(JObject json) {
-				throw new NotImplementedException();
+			public new Builder FromJson(JObject json) {
+				if (json["_type"].Value<string>() != "journalEntry") throw new InvalidOperationException("The json being used does not represent the type it is being read into.");
+
+				this.Id = json["id"].Value<string>();
+				this.Parent = json["parent"].Value<string>();
+				this.Who = json["who"].Value<string>();
+				this.Scope = json["scope"].Value<string>();
+				this.Name = json["name"].Value<string>();
+				this.Value = json["value"].Value<string>();
+				this.When = json["when"].Value<DateTime>();
+
+				return this;
 			}
 
 			public new JournalEntry ToConcrete() {

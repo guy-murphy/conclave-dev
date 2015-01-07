@@ -7,6 +7,19 @@ using Conclave.Map.Model;
 
 namespace Conclave.Funder.Model.Tests {
 
+	/// <summary>
+	/// <para>
+	/// The purpose of this test is to ensure the functionality provided by `IData`, `IMutate`, and `IConsumeData`
+	/// which are concerned with representing an object as JSON, yielding mutating state-change with immutable
+	/// entities using the builder pattern, and the consuming of JSON object representations by builders
+	/// to produce concrete immutable instances.
+	/// </para>
+	/// <para>
+	/// The test is laid out as a generic test acting upon the types `TBuilder` which is constrained to being of type `IConsumeData` and
+	/// a `TBuilder` type which is constrained to being `IData` and `IMutate`. We will perform our test touching only these interfaces and
+	/// ensure that we can round-trip from JSON via a builder, to a concrete type and back again to JSON.
+	/// </para>
+	/// </summary>
 	[TestClass]
 	public class JsonUsageTests {
 
@@ -28,7 +41,7 @@ namespace Conclave.Funder.Model.Tests {
 
 			TConcrete objMutated = objProduced.Mutate(mutator);
 
-			Assert.AreEqual(objProduced, objSource); // confirm sdProduced hasn't actually changed
+			Assert.AreEqual(objProduced, objSource); // confirm objProduced hasn't actually changed
 			Assert.AreNotEqual(objProduced, objMutated);
 
 			Assert.IsTrue(JToken.DeepEquals(targetModel, objMutated.Data));
@@ -40,7 +53,7 @@ namespace Conclave.Funder.Model.Tests {
 				source: @"{
 					  ""_type"": ""scopedData"",
 					  ""id"": ""id-0"",
-					  ""for"": ""parent-0"",
+					  ""parent"": ""parent-0"",
 					  ""scope"": ""scope-0"",
 					  ""name"": ""name-0"",
 					  ""value"": ""value-0""
@@ -48,7 +61,7 @@ namespace Conclave.Funder.Model.Tests {
 				target: @"{
 					""_type"": ""scopedData"",
 					""id"": ""id-1"",
-					""for"": ""parent-1"",
+					""parent"": ""parent-1"",
 					""scope"": ""scope-1"",
 					""name"": ""name-1"",
 					""value"": ""value-1""
@@ -71,7 +84,7 @@ namespace Conclave.Funder.Model.Tests {
 				source: @"{
 					""_type"": ""agentScopedData"",
 					""id"": ""id-0"",
-					""for"": ""parent-0"",
+					""parent"": ""parent-0"",
 					""who"": ""who-0"",
 					""scope"": ""scope-0"",
 					""name"": ""name-0"",
@@ -80,7 +93,7 @@ namespace Conclave.Funder.Model.Tests {
 				target: @"{
 					""_type"": ""agentScopedData"",
 					""id"": ""id-1"",
-					""for"": ""parent-1"",
+					""parent"": ""parent-1"",
 					""who"": ""who-1"",
 					""scope"": ""scope-1"",
 					""name"": ""name-1"",

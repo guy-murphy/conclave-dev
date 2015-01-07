@@ -66,6 +66,12 @@
             of the objects data expressed as a JSON object.
             </summary>
         </member>
+        <member name="M:Inversion.Collections.IDataCollection`1.Add(`0)">
+            <summary>
+            Adds an item to the collection.
+            </summary>
+            <param name="item">The item to add to the collection.</param>
+        </member>
         <member name="P:Inversion.Collections.IDataCollection`1.Label">
             <summary>
             The label that should be used for the collection in
@@ -99,6 +105,13 @@
             of the provided collection.
             </summary>
             <param name="other">The other collection to populate the new collection with.</param>
+        </member>
+        <member name="M:Inversion.Collections.ConcurrentDataCollection`1.Clone">
+            <summary>
+            Creates a new instance of a data collection as a copy
+            of this data collection.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Inversion.Collections.ConcurrentDataCollection`1.ContentToXml(System.Xml.XmlWriter)">
             <summary>
@@ -235,6 +248,14 @@
             For this type the json object is created each time
             it is accessed.
             </remarks>
+        </member>
+        <member name="P:Inversion.Collections.ConcurrentDataDictionary`1.Item(System.String)">
+            <summary>
+            Provides indexed acccess tot he dictionary with
+            the key provided.
+            </summary>
+            <param name="key">The key used to index a key/value pair.</param>
+            <returns>Returns the value associated with the specified key.</returns>
         </member>
         <member name="T:Inversion.Collections.DataCollection`1">
             <summary>
@@ -800,6 +821,19 @@
             <param name="self">The enumerable of strings to act upon.</param>
             <returns>Returns a has of all the elements.</returns>
         </member>
+        <member name="T:Inversion.Extensions.JsonWriterEx">
+            <summary>
+            Conventient extension methods for the json writer.
+            </summary>
+        </member>
+        <member name="M:Inversion.Extensions.JsonWriterEx.WriteProperty(Newtonsoft.Json.JsonWriter,System.String,System.String)">
+            <summary>
+            Writes both a json property name, and a value at the same time.
+            </summary>
+            <param name="self">The json writer to act upon.</param>
+            <param name="name">The name of the property.</param>
+            <param name="value">The value of the property.</param>
+        </member>
         <member name="T:Inversion.Extensions.ListEx">
             <summary>
             Utility extension methods provided for lists.
@@ -1062,6 +1096,56 @@
             <param name="text">The text to act upon.</param>
             <param name="kv">The dictionary of key-value pairs for substitution.</param>
             <returns>Returns a new string with any matching keys replaced.</returns>
+        </member>
+        <member name="T:Inversion.IConsumeData`2">
+            <summary>
+            Expresses a type that is able to consume both json and
+            xml representations of itself.
+            </summary>
+            <typeparam name="TBuilder">The type of the builder being used for this type.</typeparam>
+            <typeparam name="TConcrete">The type of the concrete product of consuming data.</typeparam>
+        </member>
+        <member name="M:Inversion.IConsumeData`2.FromConcrete(`1)">
+            <summary>
+            Assigns values to this object based on those
+            of the other object provided.
+            </summary>
+            <param name="other">The other object from which to take values.</param>
+            <returns>Returns a builder populated from the provided concrete object.</returns>
+        </member>
+        <member name="M:Inversion.IConsumeData`2.FromJson(Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            Assigns values to this object based on those
+            in the json provided.
+            </summary>
+            <param name="json">The property set from which to take values.</param>
+            <returns>Returns a builded populated from the json provided.</returns>
+        </member>
+        <member name="M:Inversion.IConsumeData`2.ToConcrete">
+            <summary>
+            Produced a concrete object from this one.
+            </summary>
+            <returns>Returns a concrete object from this one.</returns>
+        </member>
+        <member name="T:Inversion.IMutate`2">
+            <summary>
+            Describes a type that manages mutation via a `Mutate` function
+            using a builder object as an intermediary on which to exercise mutation.
+            </summary>
+            <typeparam name="TBuilder">The type of the builder that will be used for mutation.</typeparam>
+            <typeparam name="TConcrete">The type of the concrete object to be created.</typeparam>
+        </member>
+        <member name="M:Inversion.IMutate`2.Mutate(System.Func{`0,`1})">
+            <summary>
+            Mutates the current object by transforming it to a builder,
+            applying a mutation function to the builder, and then transforming
+            the builder back to a specified concrete type.
+            </summary>
+            <param name="mutator">The mutation function to apply to the builder.</param>
+            <returns>
+            Returns a concrete object which is the product of a builder that has had
+            the mutation function applied to it.
+            </returns>
         </member>
         <member name="T:Inversion.JDataObject">
             <summary>

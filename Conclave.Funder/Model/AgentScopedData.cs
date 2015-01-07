@@ -157,7 +157,7 @@ namespace Conclave.Funder.Model {
 				if (json["_type"].Value<string>() != "agentScopedData") throw new InvalidOperationException("The json being used does not represent the type it is being read into.");
 
 				this.Id = json["id"].Value<string>();
-				this.Parent = json["for"].Value<string>();
+				this.Parent = json["parent"].Value<string>();
 				this.Who = json["who"].Value<string>();
 				this.Scope = json["scope"].Value<string>();
 				this.Name = json["name"].Value<string>();

@@ -121,7 +121,7 @@ namespace Conclave.Funder.Model {
 		public void ToXml(XmlWriter writer) {
 			writer.WriteStartElement("locator");
 			writer.WriteAttributeString("id", this.Id);
-			writer.WriteAttributeString("for", this.Parent);
+			writer.WriteAttributeString("parent", this.Parent);
 			writer.WriteAttributeString("scope", this.Scope);
 			writer.WriteAttributeString("role", this.Role);
 			writer.WriteAttributeString("reference", this.Reference);
@@ -134,7 +134,7 @@ namespace Conclave.Funder.Model {
 			writer.WriteValue("locator");
 			writer.WritePropertyName("id");
 			writer.WriteValue(this.Id);
-			writer.WritePropertyName("for");
+			writer.WritePropertyName("parent");
 			writer.WriteValue(this.Parent);
 			writer.WritePropertyName("scope");
 			writer.WriteValue(this.Scope);

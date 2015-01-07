@@ -4,10 +4,11 @@ using System.Xml;
 
 using System.Collections.Immutable;
 using System.Collections.Generic;
-using Conclave.Map.Model;
-using Inversion;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+using Inversion;
 
 namespace Conclave.Funder.Model {
 	public class ScopedData : IData, IEquatable<ScopedData>, IMutate<ScopedData.Builder, ScopedData> {
@@ -38,8 +39,6 @@ namespace Conclave.Funder.Model {
 		private readonly string _name;
 		private readonly string _value;
 
-		// we memoize the result of GetHashCode()
-		// which is only calculated if (_hashcode == 0)
 		private int _hashcode = 0;
 		private JObject _data;
 
@@ -132,7 +131,7 @@ namespace Conclave.Funder.Model {
 
 		public virtual void ContentToXml(XmlWriter writer) {
 			writer.WriteAttributeString("id", this.Id);
-			writer.WriteAttributeString("for", this.Parent);
+			writer.WriteAttributeString("parent", this.Parent);
 			writer.WriteAttributeString("scope", this.Scope);
 			writer.WriteAttributeString("name", this.Name);
 			writer.WriteAttributeString("value", this.Value);
@@ -147,7 +146,7 @@ namespace Conclave.Funder.Model {
 		public virtual void ContentToJson(JsonWriter writer) {
 			writer.WritePropertyName("id");
 			writer.WriteValue(this.Id);
-			writer.WritePropertyName("for");
+			writer.WritePropertyName("parent");
 			writer.WriteValue(this.Parent);
 			writer.WritePropertyName("scope");
 			writer.WriteValue(this.Scope);
@@ -223,7 +222,7 @@ namespace Conclave.Funder.Model {
 				if (json["_type"].Value<string>() != "scopedData") throw new InvalidOperationException("The json being used does not represent the type it is being read into.");
 
 				this.Id = json["id"].Value<string>();
-				this.Parent = json["for"].Value<string>();
+				this.Parent = json["parent"].Value<string>();
 				this.Scope = json["scope"].Value<string>();
 				this.Name = json["name"].Value<string>();
 				this.Value = json["value"].Value<string>();

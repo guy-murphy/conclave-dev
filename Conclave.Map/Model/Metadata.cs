@@ -122,7 +122,7 @@ namespace Conclave.Map.Model {
 		}
 
 		public void ContentToXml(XmlWriter writer) {
-			writer.WriteAttributeString("for", this.Parent);
+			writer.WriteAttributeString("parent", this.Parent);
 			writer.WriteAttributeString("scope", this.Scope);
 			writer.WriteAttributeString("name", this.Name);
 			writer.WriteAttributeString("value", this.Value);
@@ -135,7 +135,7 @@ namespace Conclave.Map.Model {
 		}
 
 		public void ContentToJson(JsonWriter writer) {
-			writer.WritePropertyName("for");
+			writer.WritePropertyName("parent");
 			writer.WriteValue(this.Parent);
 			writer.WritePropertyName("scope");
 			writer.WriteValue(this.Scope);
@@ -225,7 +225,7 @@ namespace Conclave.Map.Model {
 			public Builder FromJson(JObject json) {
 				if (json["_type"].Value<string>() != "metadata") throw new InvalidOperationException("The json being used does not represent the type it is being read into.");
 
-				this.Parent = json["for"].Value<string>();
+				this.Parent = json["parent"].Value<string>();
 				this.Scope = json["scope"].Value<string>();
 				this.Name = json["name"].Value<string>();
 				this.Value = json["value"].Value<string>();

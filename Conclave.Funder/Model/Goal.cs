@@ -152,7 +152,7 @@ namespace Conclave.Funder.Model {
 		public void ToXml(XmlWriter writer) {
 			writer.WriteStartElement("goal");
 			writer.WriteAttributeString("id", this.Id);
-			writer.WriteAttributeString("for", this.Parent);
+			writer.WriteAttributeString("parent", this.Parent);
 			writer.WriteAttributeString("previous", this.Previous);
 			writer.WriteAttributeString("next", this.Next);
 			writer.WriteAttributeString("start", this.Start.ToString());
@@ -171,7 +171,7 @@ namespace Conclave.Funder.Model {
 			writer.WriteValue("goal");
 			writer.WritePropertyName("id");
 			writer.WriteValue(this.Id);
-			writer.WritePropertyName("for");
+			writer.WritePropertyName("parent");
 			writer.WriteValue(this.Parent);
 			writer.WritePropertyName("previous");
 			writer.WriteValue(this.Previous);

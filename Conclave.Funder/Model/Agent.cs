@@ -11,7 +11,7 @@ using Conclave.Map.Model;
 using Newtonsoft.Json.Linq;
 
 namespace Conclave.Funder.Model {
-	public class Agent: Node, IData {
+	public class Agent : Node, IData, IEquatable<Agent>, IMutate<Agent.Builder, Agent> {
 
 		private readonly ImmutableHashSet<Metadata> _contacts;
 		private readonly ImmutableHashSet<Metadata> _names;
@@ -149,10 +149,10 @@ namespace Conclave.Funder.Model {
 			return this.ToJson();
 		}
 
-		public new class Builder : Node.Builder {
+		public new class Builder : Node.Builder, IConsumeData<Builder, Agent> {
 
 			public static implicit operator Agent(Builder builder) {
-				return builder.ToAgent();
+				return builder.ToConcrete();
 			}
 
 			public static implicit operator Builder(Agent agent) {
@@ -160,7 +160,7 @@ namespace Conclave.Funder.Model {
 			}
 
 			public static ImmutableHashSet<Agent> CreateImmutableCollection(IEnumerable<Agent.Builder> meta) {
-				return meta.Select(builder => builder.ToAgent()).ToImmutableHashSet();
+				return meta.Select(builder => builder.ToConcrete()).ToImmutableHashSet();
 			}
 
 			public HashSet<Metadata.Builder> Names { get; set; }
@@ -182,10 +182,10 @@ namespace Conclave.Funder.Model {
 			}
 
 			public Builder(Agent other) {
-				this.FromAgent(other);
+				this.FromConcrete(other);
 			}
 
-			public Builder FromAgent(Agent other) {
+			public Builder FromConcrete(Agent other) {
 				base.FromNode(other);
 				this.Names = new HashSet<Metadata.Builder>(other.Names.Select(item => (Metadata.Builder)item));
 				this.Contacts = new HashSet<Metadata.Builder>(other.Contacts.Select(item => (Metadata.Builder)item));
@@ -193,7 +193,7 @@ namespace Conclave.Funder.Model {
 				return this;
 			}
 
-			public Agent ToAgent() {
+			public Agent ToConcrete() {
 				return new Agent(this.Id, this.Metadata.Cast<Metadata>(), this.Names.Cast<Metadata>(), this.Contacts.Cast<Metadata>(), this.Addresses.Cast<Metadata>());
 			}
 
