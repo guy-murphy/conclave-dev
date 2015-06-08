@@ -9,9 +9,8 @@ using Conclave.Map.Model;
 
 namespace Conclave.Map.Store {
 	public static class DataReaderEx {
-		public  static Association.Builder ReadAssociation(this IDataReader self) {
-			Association.Builder builder = new Association.Builder()
-			{
+		public static Association.Builder ReadAssociation(this IDataReader self) {
+			Association.Builder builder = new Association.Builder() {
 				Id = self.ReadString("assoc_id"),
 				Parent = self.ReadString("assoc_parent"),
 				Scope = self.ReadString("assoc_scope"),
@@ -26,8 +25,7 @@ namespace Conclave.Map.Store {
 			Metadata.Builder builder = null;
 			string parent = self.ReadString("meta_parent");
 			if (!String.IsNullOrWhiteSpace(parent)) {
-				builder = new Metadata.Builder()
-				{
+				builder = new Metadata.Builder() {
 					Parent = self.ReadString("meta_parent"),
 					Scope = self.ReadString("meta_scope"),
 					Name = self.ReadString("meta_name"),

@@ -56,8 +56,8 @@ namespace Conclave.Map.Store {
 							Scope = reader.ReadString("occur_scope"),
 							Role = reader.ReadString("occur_role"),
 							Behaviour = reader.ReadString("occur_behaviour"),
-							Reference = reader.ReadString("occur_ref"),
-							EncodedData = reader.ReadBinaryData("occur_data")
+							Reference = reader.ReadString("occur_ref")
+//							EncodedData = reader.ReadBinaryData("occur_data")
 						};
 						currentTopic.Occurrences.Add(currentOccur);
 					}
@@ -69,7 +69,7 @@ namespace Conclave.Map.Store {
 							Parent = topicMetaParent,
 							Scope = reader.ReadString("topic_meta_scope"),
 							Name = reader.ReadString("topic_meta_name"),
-							Value = reader.ReadString("topic_meta_value"),
+							Value = reader.ReadString("topic_meta_value")
 						};
 						currentTopic.AddMetadata(currentTopicMeta);
 					}
@@ -81,7 +81,7 @@ namespace Conclave.Map.Store {
 							Parent = assocMetaParent,
 							Scope = reader.ReadString("assoc_meta_scope"),
 							Name = reader.ReadString("assoc_meta_name"),
-							Value = reader.ReadString("assoc_meta_value"),
+							Value = reader.ReadString("assoc_meta_value")
 						};
 						currentAssoc.AddMetadata(currentAssocMeta);
 					}

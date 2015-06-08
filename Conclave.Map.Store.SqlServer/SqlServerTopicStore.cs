@@ -124,7 +124,7 @@ namespace Conclave.Map.Store {
 			// move to extension
 			using (IDataReader reader = this.Read(sql, _parameter("@parent", parent), _parameter("@scope", scope), _parameter("@role", role), _parameter("@behaviour", behaviour), _parameter("@reference", reference))) {
 				while (reader.Read()) {
-					return new Occurrence(parent, scope, role, behaviour, reference, reader.ReadBinaryData("data"));
+					return new Occurrence(parent, scope, role, behaviour, reference, reader.ReadData("data"));
 				}
 			}
 			return Occurrence.Blank;
@@ -136,7 +136,7 @@ namespace Conclave.Map.Store {
 			List<Occurrence> result = new List<Occurrence>();
 			using (IDataReader reader = this.Read(sql, _parameter("@parent", parent))) {
 				while (reader.Read()) {
-					result.Add(new Occurrence(parent, reader.ReadString("scope"), reader.ReadString("role"), reader.ReadString("behaviour"), reader.ReadString("reference"), reader.ReadBinaryData("data")));
+					result.Add(new Occurrence(parent, reader.ReadString("scope"), reader.ReadString("role"), reader.ReadString("behaviour"), reader.ReadString("reference"), reader.ReadData("data")));
 				}
 			}
 			return result;
